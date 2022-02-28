@@ -3,7 +3,8 @@ from tkinter import messagebox
 import tkinter as tk
 import bitlyshortener
 from bitlyshortener import *
-from tkcalendar import *
+import datetime
+from datetime import date
 
 # Bitly Setup
 tokens_pool = ['d2375064d1ef535690914f2d2d96d7390b41fb10']  # Use your own API key.
@@ -91,62 +92,45 @@ tier_options.place(y=193, x=0)
 
 
 
-# Calendar Date
-def grab_date():
-    global cal
-    splash_window = Toplevel()
-    splash_window.title("Select Date")
-    screen_width = splash_window.winfo_screenwidth()
-    screen_height = splash_window.winfo_screenheight()
-    login_width = 300
-    login_height = 250
-    x = (screen_width / 2) - (login_width / 2)
-    y = (screen_height / 2) - (login_height / 2)
-    splash_window.geometry(f'{login_width}x{login_height}+{int(x)}+{int(y)}')
-    cal = Calendar(splash_window, selectmode="day", date_pattern="yyyy-mm-dd")
-    cal.pack()
-
-    def pick_date():
-        global cal_label
-        global cal_time
-        cal_label = Label(master)
-        cal_label.config(text=cal.get_date())
-        cal_label.place(x=0, y=333)
-        splash_window.destroy()
-
-
-
-
-
-    def clear_date():
-        cal_label.destroy()
-    pick_button = Button(splash_window, text="Pick Date", command=lambda: pick_date()).place(x=50, y=200)
-    clear_button = Button(splash_window, text="Clear Date", command=lambda: clear_date()).place(x=170, y=200)
-
-
-date_button = Button(master, text="Start Time: Calendar", command=lambda: grab_date()).place(x=0, y=304)
-start_time_label = Label(master)
-gmt_label1 = Label(master, text="GMT+8").place(x=132, y=335)
+start_time_label = Label(master, text="Start Time:").place(x=0, y=305)
 start_time = StringVar()
-start_time.set("hh:mm")
-start_time_entry_box = Entry(master, textvariable=start_time, width=10).place(x=70, y=335, height=20)
-cal_label2 = Label(master)
-cal_label2.config(text="____-__-___")
-cal_label2.place(x=0, y=333)
+start_time.set("10:30")
+start_time_entry_box = Entry(master, textvariable=start_time, width=20).place(x=0, y=325, height=25)
+
 
 # End Time
 end_time_label = Label(master, text="End Time:").place(x=0, y=355)
 end_time = StringVar()
-end_time.set("N/A")
-end_time_entry_box = Entry(master, textvariable=end_time, width=50).place(x=0, y=375, height=20)
-# gmt_label2 = Label(master, text="GMT+8").place(x=132, y=375)
+end_time.set("11:30")
+end_time_entry_box = Entry(master, textvariable=end_time, width=20).place(x=0, y=375, height=25)
+
 
 
 # Time Elapsed
+
+def elapsed_time(start, end):
+    a = datetime.datetime.strptime(start, '%H:%M')
+    b = datetime.datetime.strptime(end, '%H:%M')
+
+    diff = b - a
+
+    hours = int(diff.seconds // (60 * 60))
+    mins = int((diff.seconds // 60) % 60)
+
+    if hours > 0 and mins > 0:
+        return (str(hours) + "h " + (str(mins) + "m"))
+    elif hours > 0:
+        return (str(hours) + "h")
+    elif mins > 0:
+        return (str(mins) + "m")
+    else:
+        pass
+
+
 elapsed_time_label = Label(master, text="Time Elapsed:").place(x=0, y=260)
-elapsed_time = StringVar()
-elapsed_time.set("N/A")
-elapsed_time_entry_box = Entry(master, textvariable=elapsed_time, width=50).place(x=0, y=280, height=25)
+# elapsed_time = StringVar()
+# elapsed_time.set("N/A")
+# elapsed_time_entry_box = Entry(master, textvariable=elapsed_time, width=20).place(x=0, y=280, height=25)
 
 
 # Service Degradation
@@ -345,8 +329,8 @@ Name: {name.get()}
 Affecting System: {', '.join(items)}
 Tier: {tier_variable.get()}
 Operator: {', '.join(op_items)}
-Time Elapsed: {elapsed_time.get()} 
-Start Time: {cal.get_date()} {start_time.get()} (GMT+8)
+Time Elapsed: 
+Start Time: {start_time.get()} (GMT+8)
 End Time: {end_time.get()} 
 Service Degradation: {service_degradation_variable.get()}
 Symptoms: {symptoms.get()}
@@ -392,8 +376,8 @@ Name: {name.get()}
 Affecting System: {', '.join(items)}
 Tier: {tier_variable.get()}
 Operator: {', '.join(op_items)}
-Time Elapsed: {elapsed_time.get()}
-Start Time: {cal.get_date()} {start_time.get()} (GMT+8)
+Time Elapsed: {elapsed_time(start_time.get(), end_time.get())}
+Start Time: {start_time.get()} (GMT+8)
 End Time: {end_time.get()} (GMT+8)
 Service Degradation: {service_degradation_variable.get()}
 Symptoms: {symptoms.get()}
