@@ -275,13 +275,10 @@ def select_affecting_system():
     # Creates the list and label inside the window
     def listbox_used(event):
         global items
-        global af_label
         items = []
         curselection = listbox.curselection()
         for index in curselection:
             items.append(listbox.get(index))  # Gets current selection from listbox
-        af_label = Label(master, text=(', '.join(items)))
-        af_label.place(y=147, x=150)
 
     yscrollbar = Scrollbar(splash_window)
     yscrollbar.pack(side=RIGHT, fill=Y)
@@ -297,6 +294,9 @@ def select_affecting_system():
     yscrollbar.config(command=listbox.yview)
 
     def close_window():
+        global af_label
+        af_label = Label(master, text=(', '.join(items)))  # Displays current selection
+        af_label.place(y=147, x=150)
         splash_window.destroy()
 
     pick_button = Button(splash_window, text="Select", command=lambda: close_window()).pack(pady=20)
@@ -307,11 +307,7 @@ def select_affecting_system():
 # Overwrites the existing label. Not recommended
 def clear_affecting_systems():
     items.clear()
-    overwrite_af_label = Label(master, text=('                                    '
-                                             '                                    '
-                                             '                                    '
-                                             '                                    '))
-    overwrite_af_label.place(y=147, x=150)
+    af_label.destroy()
 
 
 def select_operators():
