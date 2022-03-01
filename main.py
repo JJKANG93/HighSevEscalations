@@ -200,8 +200,8 @@ symptoms.place(x=0, y=470, height=100, width=390)
 # Action Taken
 action_taken_label = Label(master, text="Action Taken").place(x=550, y=20)
 action_taken = Text(master)
-action_taken.insert("3.0", "Internal testing showed no errors on our system.\n"
-                    "ITOC is contacting relevant teams.\n"
+action_taken.insert("3.0", "Internal testing showed no errors on our system. "
+                    "ITOC is contacting relevant teams. "
                     "ITOC is checking with the operator.")
 action_taken.place(x=400, y=40, width=390, height=100)
 action_taken.get("1.0", "end-1c")
