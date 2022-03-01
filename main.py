@@ -107,8 +107,8 @@ end_time_entry_box = Entry(master, textvariable=end_time, width=0).place(x=100, 
 
 # Time Elapsed for Hours and Minutes
 def elapsed_time(start, end):
-    a = datetime.datetime.strptime(start, '%H:%M')
-    b = datetime.datetime.strptime(end, '%H:%M')
+    a = datetime.strptime(start, '%H:%M')
+    b = datetime.strptime(end, '%H:%M')
 
     diff = b - a
 
