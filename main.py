@@ -272,6 +272,14 @@ def select_affecting_system():
     y = (screen_height / 2) - (login_height / 2)
     splash_window.geometry(f'{login_width}x{login_height}+{int(x)}+{int(y)}')
 
+    yscrollbar = Scrollbar(splash_window)
+    yscrollbar.pack(side=RIGHT, fill=Y)
+    listbox = Listbox(splash_window, height=10, selectmode='multiple', yscrollcommand=yscrollbar.set)
+    yscrollbar.config(command=listbox.yview)
+
+    for item in affecting_system:
+        listbox.insert(affecting_system.index(item), item)
+
     # Creates the list and label inside the window
     def listbox_used(event):
         global items
@@ -280,18 +288,8 @@ def select_affecting_system():
         for index in curselection:
             items.append(listbox.get(index))  # Gets current selection from listbox
 
-    yscrollbar = Scrollbar(splash_window)
-    yscrollbar.pack(side=RIGHT, fill=Y)
-
-    listbox = Listbox(splash_window, height=10, selectmode='multiple', yscrollcommand=yscrollbar.set)
-
-    for item in affecting_system:
-        listbox.insert(affecting_system.index(item), item)
-
     listbox.bind("<<ListboxSelect>>", listbox_used)
     listbox.pack(padx=10, pady=10, expand=YES, fill="both")
-
-    yscrollbar.config(command=listbox.yview)
 
     def close_window():
         global af_label
@@ -300,20 +298,14 @@ def select_affecting_system():
         splash_window.destroy()
 
     select_button = Button(splash_window, text="Select", command=lambda: close_window()).pack(pady=0)
+    af_label.destroy()
 
     splash_window.mainloop()
-
-
-def clear_affecting_systems():
-    items.clear()
-    af_label.destroy()
 
 
 # Affecting System Buttons
 af_button = Button(master, text="Affecting System", command=lambda: select_affecting_system())
 af_button.place(y=147, x=0)
-clear_affecting_system_button = Button(master, text="Clear", command=lambda: clear_affecting_systems())
-clear_affecting_system_button.place(y=147, x=140)
 
 
 
@@ -328,6 +320,14 @@ def select_operators():
     y = (screen_height / 2) - (login_height / 2)
     splash_window.geometry(f'{login_width}x{login_height}+{int(x)}+{int(y)}')
 
+    yscrollbar = Scrollbar(splash_window)
+    yscrollbar.pack(side=RIGHT, fill=Y)
+    listbox = Listbox(splash_window, height=10, selectmode='multiple', yscrollcommand=yscrollbar.set)
+    yscrollbar.config(command=listbox.yview)
+
+    for item in operator:
+        listbox.insert(operator.index(item), item)
+
     # Creates the list and label inside the window
     def listbox_used(event):
         global op_items
@@ -336,18 +336,8 @@ def select_operators():
         for index in curselection:
             op_items.append(listbox.get(index))  # Gets current selection from listbox
 
-    yscrollbar = Scrollbar(splash_window)
-    yscrollbar.pack(side=RIGHT, fill=Y)
-
-    listbox = Listbox(splash_window, height=10, selectmode='multiple', yscrollcommand=yscrollbar.set)
-
-    for item in operator:
-        listbox.insert(operator.index(item), item)
-
     listbox.bind("<<ListboxSelect>>", listbox_used)
     listbox.pack(padx=10, pady=10, expand=YES, fill="both")
-
-    yscrollbar.config(command=listbox.yview)
 
     def close_window():
         global op_label
@@ -356,19 +346,15 @@ def select_operators():
         splash_window.destroy()
 
     select_button = Button(splash_window, text="Select", command=lambda: close_window()).pack(pady=0)
+    op_label.destroy()
 
     splash_window.mainloop()
 
 
-def clear_operators():
-    op_items.clear()
-    op_label.destroy()
-
 #Operator Buttons
 operator_button = Button(master, text="Operators", command=lambda: select_operators())
 operator_button.place(y=230, x=0)
-clear_operator_button = Button(master, text="Clear", command=lambda: clear_operators())
-clear_operator_button.place(y=230, x=95)
+
 
 
 def print_template():
