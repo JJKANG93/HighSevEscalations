@@ -1,3 +1,4 @@
+import time
 from tkinter import *
 from tkinter import messagebox
 import tkinter as tk
@@ -164,11 +165,19 @@ def num_of_days(year1, month1, day1, year2, month2, day2):
         return str("")
 
 
+# Show Current Time
+def clock():
+    hour = time.strftime("%H")
+    minute = time.strftime("%M")
+    second = time.strftime("%S")
 
-# elapsed_time_label = Label(master, text=f"Time Elapsed:").place(x=0, y=260)
-# elapsed_time = StringVar()
-# elapsed_time.set("N/A")
-# elapsed_time_entry_box = Entry(master, textvariable=elapsed_time, width=20).place(x=0, y=280, height=25)
+    clock_label = Label(master)
+    clock_label.place(x=0, y=260)
+    clock_label.config(text="Current Time GMT(+8): \n" + hour + ":" + minute + ":" + second)
+    clock_label.after(1000, clock)
+
+
+clock()
 
 # Service Degradation
 service_degradation_label = Label(master, text="Service Degradation").place(x=0, y=400)
@@ -368,7 +377,8 @@ Name: {name.get()}
 Affecting System: {', '.join(items)}
 Tier: {tier_variable.get()}
 Operator: {', '.join(op_items)}
-Time Elapsed:{num_of_days(int(year1_str.get()), int(month1_str.get()), int(day1_str.get()), int(year2_str.get()), int(month2_str.get()), int(day2_str.get()))} {elapsed_time(start_time.get(), end_time.get())}
+Time Elapsed:{num_of_days(int(year1_str.get()), int(month1_str.get()), int(day1_str.get()), int(year2_str.get()),
+                          int(month2_str.get()), int(day2_str.get()))} {elapsed_time(start_time.get(), end_time.get())}
 Start Time: {year1_str.get()}-{month1_str.get()}-{day1_str.get()} {start_time.get()} (GMT+8)
 End Time: {resolved_checker()}
 Service Degradation: {service_degradation_variable.get()}
