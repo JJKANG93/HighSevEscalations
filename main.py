@@ -299,15 +299,22 @@ def select_affecting_system():
         af_label.place(y=147, x=150)
         splash_window.destroy()
 
-    pick_button = Button(splash_window, text="Select", command=lambda: close_window()).pack(pady=20)
+    select_button = Button(splash_window, text="Select", command=lambda: close_window()).pack(pady=0)
 
     splash_window.mainloop()
 
 
-# Overwrites the existing label. Not recommended
 def clear_affecting_systems():
     items.clear()
     af_label.destroy()
+
+
+# Affecting System Buttons
+af_button = Button(master, text="Affecting System", command=lambda: select_affecting_system())
+af_button.place(y=147, x=0)
+clear_affecting_system_button = Button(master, text="Clear", command=lambda: clear_affecting_systems())
+clear_affecting_system_button.place(y=147, x=140)
+
 
 
 def select_operators():
@@ -348,15 +355,20 @@ def select_operators():
         op_label.place(y=230, x=110)
         splash_window.destroy()
 
-    pick_button = Button(splash_window, text="Select", command=lambda: close_window()).pack(pady=20)
+    select_button = Button(splash_window, text="Select", command=lambda: close_window()).pack(pady=0)
 
     splash_window.mainloop()
 
 
-# Overwrites the existing label. Not recommended
 def clear_operators():
     op_items.clear()
     op_label.destroy()
+
+#Operator Buttons
+operator_button = Button(master, text="Operators", command=lambda: select_operators())
+operator_button.place(y=230, x=0)
+clear_operator_button = Button(master, text="Clear", command=lambda: clear_operators())
+clear_operator_button.place(y=230, x=95)
 
 
 def print_template():
@@ -410,14 +422,6 @@ Join Microsoft Teams Chat: {shortener(bitly_url)}
 
 print_button = Button(master, text="Print", command=lambda: print_template())
 print_button.place(y=0, x=350)
-af_print_button = Button(master, text="Affecting System", command=lambda: select_affecting_system())
-af_print_button.place(y=147, x=0)
-clear_affecting_system_button = Button(master, text="Clear", command=lambda: clear_affecting_systems())
-clear_affecting_system_button.place(y=147, x=140)
-print_button = Button(master, text="Operators", command=lambda: select_operators())
-print_button.place(y=230, x=0)
-clear_operator_button = Button(master, text="Clear", command=lambda: clear_operators())
-clear_operator_button.place(y=230, x=95)
 
 
 mainloop()
