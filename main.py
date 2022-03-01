@@ -248,7 +248,7 @@ customer_ref_entry_box = Entry(master, textvariable=customer_ref, width=50).plac
 teams_chat_label = Label(master, text='Shorten to Bitly URL (Needs "https://"): \n '
                                       'Join Microsoft Teams Chat', justify="left").place(x=400, y=505, anchor="w")
 bitly_url = StringVar()
-bitly_url.set("https://www.google.com")
+bitly_url.set("N/A")
 teams_chat_entry_box = Entry(master, textvariable=bitly_url, width=50).place(x=400, y=520, height=25)
 
 
@@ -258,7 +258,9 @@ def shortener(url):
     tokens_pool = ['d2375064d1ef535690914f2d2d96d7390b41fb10']  # Use your own API key.
     shortener = bitlyshortener.Shortener(tokens=tokens_pool, max_cache_size=256)
 
-    if url != "":
+    if url == "N/A":
+        return url
+    elif url != "":
         return str(','.join(shortener.shorten_urls([bitly_url.get()])))
     else:
         return str("N/A")
