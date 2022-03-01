@@ -119,6 +119,8 @@ def elapsed_time(start, end):
         return str(hours) + "h"
     elif mins > 0:
         return str(mins) + "m"
+    elif mins == 0:
+        return str("N/A")
     else:
         pass
 
