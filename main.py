@@ -324,13 +324,10 @@ def select_operators():
     # Creates the list and label inside the window
     def listbox_used(event):
         global op_items
-        global op_label
         op_items = []
         curselection = listbox.curselection()
         for index in curselection:
             op_items.append(listbox.get(index))  # Gets current selection from listbox
-        op_label = Label(master, text=(', '.join(op_items)))
-        op_label.place(y=230, x=110)
 
     yscrollbar = Scrollbar(splash_window)
     yscrollbar.pack(side=RIGHT, fill=Y)
@@ -346,6 +343,9 @@ def select_operators():
     yscrollbar.config(command=listbox.yview)
 
     def close_window():
+        global op_label
+        op_label = Label(master, text=(', '.join(op_items)))
+        op_label.place(y=230, x=110)
         splash_window.destroy()
 
     pick_button = Button(splash_window, text="Select", command=lambda: close_window()).pack(pady=20)
@@ -356,15 +356,7 @@ def select_operators():
 # Overwrites the existing label. Not recommended
 def clear_operators():
     op_items.clear()
-    overwrite_op_label = Label(master, text=('                                    '
-                                             '                                    '
-                                             '                                    '
-                                             '                                    '
-                                             '                                    '
-                                             '                                    '
-                                             '                                    '
-                                             '                                    '))
-    overwrite_op_label.place(y=230, x=110)
+    op_label.destroy()
 
 
 def print_template():
