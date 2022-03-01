@@ -118,37 +118,37 @@ def elapsed_time(start, end):
 
 # Time Elapsed for Days and Dates
 year1_str = StringVar()
-year1_str.set("YYYY")
+year1_str.set(2022)
 year1 = Entry(master, textvariable=year1_str, width=0).place(x=0, y=325, height=25)
 year1_int = year1
 
 month1_str = StringVar()
-month1_str.set("M")
+month1_str.set("MM")
 month1 = Entry(master, textvariable=month1_str, width=0).place(x=40, y=325, height=25)
 month1_int = month1
 
 day1_str = StringVar()
-day1_str.set("D")
+day1_str.set("DD")
 day1 = Entry(master, textvariable=day1_str, width=0).place(x=70, y=325, height=25)
 day1_int = day1
 
 year2_str = StringVar()
-year2_str.set("YYYY")
+year2_str.set(2022)
 year2 = Entry(master, textvariable=year2_str, width=0).place(x=0, y=375, height=25)
 year_int = year2
 
 month2_str = StringVar()
-month2_str.set("M")
+month2_str.set("MM")
 month2 = Entry(master, textvariable=month2_str, width=0).place(x=40, y=375, height=25)
 month2_int = month2
 
 day2_str = StringVar()
-day2_str.set("D")
+day2_str.set("DD")
 day2 = Entry(master, textvariable=day2_str, width=0).place(x=70, y=375, height=25)
 day2_int = day2
 
 
-def numOfDays(year1, month1, day1, year2, month2, day2):
+def num_of_days(year1, month1, day1, year2, month2, day2):
     date1 = date(year1, month1, day1)
     date2 = date(year2, month2, day2)
     date_diff = (date2 - date1).days
@@ -362,7 +362,7 @@ Name: {name.get()}
 Affecting System: {', '.join(items)}
 Tier: {tier_variable.get()}
 Operator: {', '.join(op_items)}
-Time Elapsed:{numOfDays(int(year1_str.get()), int(month1_str.get()), int(day1_str.get()), int(year2_str.get()), int(month2_str.get()), int(day2_str.get()))} {elapsed_time(start_time.get(), end_time.get())}
+Time Elapsed:{num_of_days(int(year1_str.get()), int(month1_str.get()), int(day1_str.get()), int(year2_str.get()), int(month2_str.get()), int(day2_str.get()))} {elapsed_time(start_time.get(), end_time.get())}
 Start Time: {start_time.get()} (GMT+8)
 End Time: {end_time.get()} (GMT+8)
 Service Degradation: {service_degradation_variable.get()}
@@ -392,10 +392,10 @@ Join Microsoft Teams Chat: {shortener(bitly_url)}
         T.insert(tk.END, final)
 
     except NameError:
-        messagebox.showerror('Error', 'Missing Info')
+        messagebox.showerror('Error', 'Incorrect or Incomplete Information.')
         pass
     except ValueError:
-        messagebox.showerror('Error', 'Missing Info')
+        messagebox.showerror('Error', 'Incorrect or Incomplete Information.')
         pass
 
     tk.mainloop()
