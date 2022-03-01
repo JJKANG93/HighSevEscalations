@@ -35,7 +35,7 @@ operator = ["all", "TEG1", "GT", "TEG2", "BBIN_CNY", "TEG3", "JuGaming(A)",
             "JuGamingA(28)", "TEG6", "Oriental_Game", "OG", "TEG0", "Power_Asia", "infini88",
             "Asia888", "ambtw", "topusd3", "TOP_USD2",
             "Poseidon", "TH1GAMES", "TOP_USD(GAMA)", "UEG", "inplaymatrix", "GplayG", "MGP SW", "AMBSW",
-            "AMBGAMESSW" "pay4dsw",
+            "AMBGAMESSW", "pay4dsw",
             "Sempris", "W88", "Wild_Treasure", "188bet", "Asiabet", "Solid_Gaming", "GSD", "Foxnos", "M88",
             "Asian_Logic", "VWIN", "SBO"]
 service_degradation = ["N/A", "25%", "Over 25%", "50%", "Over 50%", "75%", "Over 75%", "100%"]
@@ -291,13 +291,13 @@ def select_affecting_system():
     listbox.bind("<<ListboxSelect>>", listbox_used)
     listbox.pack(padx=10, pady=10, expand=YES, fill="both")
 
-    def close_window():
+    def select():
         global af_label
-        af_label = Label(master, text=(', '.join(items)))  # Displays current selection
+        af_label = Label(master, text=(', '.join(items)), wraplength=240, justify="right")  # Displays current selection
         af_label.place(y=147, x=150)
         splash_window.destroy()
 
-    select_button = Button(splash_window, text="Select", command=lambda: close_window()).pack(pady=0)
+    select_button = Button(splash_window, text="Select", command=lambda: select()).pack(pady=0)
     af_label.destroy()
 
     splash_window.mainloop()
@@ -308,7 +308,7 @@ af_button = Button(master, text="Affecting System", command=lambda: select_affec
 af_button.place(y=147, x=0)
 
 
-
+# Select operators from a listbox
 def select_operators():
     splash_window = Tk()
     splash_window.title("Select Affecting System")
@@ -339,13 +339,13 @@ def select_operators():
     listbox.bind("<<ListboxSelect>>", listbox_used)
     listbox.pack(padx=10, pady=10, expand=YES, fill="both")
 
-    def close_window():
+    def select():
         global op_label
-        op_label = Label(master, text=(', '.join(op_items)))
-        op_label.place(y=230, x=110)
+        op_label = Label(master, text=(', '.join(op_items)), wraplength=120, justify="center")
+        op_label.place(y=230, x=280)
         splash_window.destroy()
 
-    select_button = Button(splash_window, text="Select", command=lambda: close_window()).pack(pady=0)
+    select_button = Button(splash_window, text="Select", command=lambda: select()).pack(pady=0)
     op_label.destroy()
 
     splash_window.mainloop()
