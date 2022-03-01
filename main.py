@@ -1,5 +1,5 @@
 from tkinter import Tk, Label, StringVar, OptionMenu, Entry, Text, Scrollbar, RIGHT, Y, Listbox, YES, Button, mainloop,\
-    messagebox, END
+    messagebox, END, LabelFrame
 import bitlyshortener
 import time
 from datetime import date, datetime
@@ -14,6 +14,7 @@ x = (screen_width / 2) - (app_width / 2)
 y = (screen_height / 2) - (app_height / 2)
 master.geometry(f'{app_width}x{app_height}+{int(x)}+{int(y)}')  # main window start in the center of the screen
 master.title('High Sev Escalation App --Version 3.0')
+
 
 status = ["New",
           "New/Resolved",
@@ -67,7 +68,7 @@ def resolved_checker():
     if status_variable.get() == "Resolved" or status_variable.get() == "New/Resolved" or \
             status_variable.get() == "Re-occurring/Resolved":
         return str(year2_str.get()) + "-" + str(month2_str.get()) + "-" + str(day2_str.get()) + " " + \
-               str(end_time.get()) + " " + "GMT(+8)"
+               str(end_time.get()) + " " + "(GMT+8)"
     else:
         return "N/A"
 
