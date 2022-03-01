@@ -64,6 +64,12 @@ status_variable.set(status[0])  # default value
 status_options = OptionMenu(master, status_variable, *status)
 status_options.place(y=15, x=0)
 
+def resolved_checker():
+    if status_variable.get() == "Resolved" or status_variable.get() == "New/Resolved" or status_variable.get() == "Re-occurring/Resolved":
+        return str(year2_str.get()) + "-" + str(month2_str.get()) + "-" + str(day2_str.get()) + " " + str(end_time.get()) + " " + "GMT(+8)"
+    else:
+        return "N/A"
+
 # Severity Dropdown Menu
 severity_label = Label(master, text="Severity").place(x=0, y=45)
 severity_variable = StringVar(master)
@@ -363,8 +369,8 @@ Affecting System: {', '.join(items)}
 Tier: {tier_variable.get()}
 Operator: {', '.join(op_items)}
 Time Elapsed:{num_of_days(int(year1_str.get()), int(month1_str.get()), int(day1_str.get()), int(year2_str.get()), int(month2_str.get()), int(day2_str.get()))} {elapsed_time(start_time.get(), end_time.get())}
-Start Time: {start_time.get()} (GMT+8)
-End Time: {end_time.get()} (GMT+8)
+Start Time: {year1_str.get()}-{month1_str.get()}-{day1_str.get()} {start_time.get()} (GMT+8)
+End Time: {resolved_checker()}
 Service Degradation: {service_degradation_variable.get()}
 Symptoms: {symptoms.get()}
 Action Taken: {action_taken.get("1.0", "end-1c")}
