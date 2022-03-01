@@ -16,7 +16,7 @@ screen_height = master.winfo_screenheight()
 x = (screen_width / 2) - (app_width / 2)
 y = (screen_height / 2) - (app_height / 2)
 master.geometry(f'{app_width}x{app_height}+{int(x)}+{int(y)}')  # main window start in the center of the screen
-master.title('High Sev Escalation App --Version 2.0')
+master.title('High Sev Escalation App --Version 3.0')
 
 status = ["New",
           "New/Resolved",
@@ -175,7 +175,7 @@ def clock():
 
     clock_label = Label(master)
     clock_label.place(x=0, y=260)
-    clock_label.config(text="Current Time GMT(+8): \n" + hour + ":" + minute + ":" + second)
+    clock_label.config(text="Current Time (GMT+8): \n" + hour + ":" + minute + ":" + second)
     clock_label.after(1000, clock)
 
 
@@ -425,11 +425,11 @@ print_button.place(y=0, x=350)
 af_print_button = Button(master, text="Affecting System", command=lambda: select_affecting_system())
 af_print_button.place(y=147, x=0)
 clear_affecting_system_button = Button(master, text="Clear", command=lambda: clear_affecting_systems())
-clear_affecting_system_button.place(y=147, x=103)
+clear_affecting_system_button.place(y=147, x=140)
 print_button = Button(master, text="Operators", command=lambda: select_operators())
 print_button.place(y=230, x=0)
-clear_affecting_system_button = Button(master, text="Clear", command=lambda: clear_operators())
-clear_affecting_system_button.place(y=230, x=65)
+clear_operator_button = Button(master, text="Clear", command=lambda: clear_operators())
+clear_operator_button.place(y=230, x=95)
 
 
 mainloop()
