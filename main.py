@@ -63,7 +63,7 @@ status_label = Label(master, text="Status").place(x=0, y=0)
 status_variable = StringVar(master)
 status_variable.set(status[0])  # default value
 status_options = OptionMenu(master, status_variable, *status)
-status_options.place(y=15, x=0)
+status_options.place(y=20, x=0)
 
 def resolved_checker():
     if status_variable.get() == "Resolved" or status_variable.get() == "New/Resolved" or status_variable.get() == "Re-occurring/Resolved":
@@ -82,7 +82,7 @@ severity_options.place(y=65, x=0)
 name_label = Label(master, text="Escalation Name Here").place(x=0, y=95)
 name = StringVar()
 name.set("GPM degradation by XX% affecting <xxx>")
-name_entry_box = Entry(master, textvariable=name, width=50).place(x=0, y=120, height=25)
+name_entry_box = Entry(master, textvariable=name, width=42).place(x=0, y=120, height=25)
 
 # Tier
 tier_label = Label(master, text="Tier").place(x=0, y=175)
@@ -154,7 +154,7 @@ day2_str.set("DD")
 day2 = Entry(master, textvariable=day2_str, width=0).place(x=70, y=375, height=25)
 day2_int = day2
 
-
+# Day difference calculator
 def num_of_days(year1, month1, day1, year2, month2, day2):
     date1 = date(year1, month1, day1)
     date2 = date(year2, month2, day2)
@@ -188,9 +188,9 @@ service_degradation_options.place(y=420, x=0)
 
 # Symptoms
 symptoms_label = Label(master, text="Symptoms").place(x=0, y=450)
-symptoms = StringVar()
-symptoms.set("GPM degradation by XX% affecting <xxx>")
-symptoms_entry_box = Entry(master, textvariable=symptoms, width=50).place(x=0, y=470, height=25)
+symptoms = Text(master)
+symptoms.insert("3.0", "GPM degradation by XX% affecting <xxx>")
+symptoms.place(x=0, y=470, height=100, width=390)
 
 # Action Taken
 action_taken_label = Label(master, text="Action Taken").place(x=550, y=20)
@@ -245,6 +245,7 @@ teams_chat_label = Label(master, text='Shorten to Bitly URL (Needs "https://"): 
 bitly_url = StringVar()
 bitly_url.set("https://www.google.com")
 teams_chat_entry_box = Entry(master, textvariable=bitly_url, width=50).place(x=400, y=520, height=25)
+
 
 # Bitly Setup
 def shortener(url):
@@ -382,7 +383,7 @@ Time Elapsed:{num_of_days(int(year1_str.get()), int(month1_str.get()), int(day1_
 Start Time: {year1_str.get()}-{month1_str.get()}-{day1_str.get()} {start_time.get()} (GMT+8)
 End Time: {resolved_checker()}
 Service Degradation: {service_degradation_variable.get()}
-Symptoms: {symptoms.get()}
+Symptoms: {symptoms.get("1.0","end-1c")}
 Action Taken: {action_taken.get("1.0", "end-1c")}
 Root Cause: {root_cause_variable.get()}
 Comms Manager: {comms_manager_variable.get()}
