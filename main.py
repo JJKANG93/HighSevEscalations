@@ -2,8 +2,7 @@ from tkinter import Tk, Label, StringVar, OptionMenu, Entry, Text, Scrollbar, RI
     messagebox, END
 import bitlyshortener
 import time
-import datetime
-from datetime import date
+from datetime import date, datetime
 
 # Main Window
 master = Tk()
