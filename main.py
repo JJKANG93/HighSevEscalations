@@ -1,9 +1,7 @@
-import time
-from tkinter import *
-from tkinter import messagebox
-import tkinter as tk
+from tkinter import Tk, Label, StringVar, OptionMenu, Entry, Text, Scrollbar, RIGHT, Y, Listbox, YES, Button, mainloop,\
+    messagebox, END
 import bitlyshortener
-from bitlyshortener import *
+import time
 import datetime
 from datetime import date
 
@@ -65,11 +63,15 @@ status_variable.set(status[0])  # default value
 status_options = OptionMenu(master, status_variable, *status)
 status_options.place(y=20, x=0)
 
+
 def resolved_checker():
-    if status_variable.get() == "Resolved" or status_variable.get() == "New/Resolved" or status_variable.get() == "Re-occurring/Resolved":
-        return str(year2_str.get()) + "-" + str(month2_str.get()) + "-" + str(day2_str.get()) + " " + str(end_time.get()) + " " + "GMT(+8)"
+    if status_variable.get() == "Resolved" or status_variable.get() == "New/Resolved" or \
+            status_variable.get() == "Re-occurring/Resolved":
+        return str(year2_str.get()) + "-" + str(month2_str.get()) + "-" + str(day2_str.get()) + " " + \
+               str(end_time.get()) + " " + "GMT(+8)"
     else:
         return "N/A"
+
 
 # Severity Dropdown Menu
 severity_label = Label(master, text="Severity").place(x=0, y=45)
@@ -156,13 +158,14 @@ day2_str.set("DD")
 day2 = Entry(master, textvariable=day2_str, width=0).place(x=70, y=375, height=25)
 day2_int = day2
 
+
 # Day difference calculator
 def num_of_days(year1, month1, day1, year2, month2, day2):
     date1 = date(year1, month1, day1)
     date2 = date(year2, month2, day2)
     date_diff = (date2 - date1).days
     if date_diff > 0:
-        return " "+str(date_diff) +"d"
+        return " "+str(date_diff) + "d"
     else:
         return str("")
 
@@ -175,7 +178,7 @@ def clock():
 
     clock_label = Label(master)
     clock_label.place(x=0, y=260)
-    clock_label.config(text="Current Time (GMT+8): \n" + hour + ":" + minute + ":" + second)
+    clock_label.config(text="Current Time (GMT+8): \n" + hour + ":" + minute + ":" + second, justify="left")
     clock_label.after(1000, clock)
 
 
@@ -243,7 +246,8 @@ customer_ref.set("N/A")
 customer_ref_entry_box = Entry(master, textvariable=customer_ref, width=50).place(x=400, y=460, height=25)
 
 # Teams Chat/Bitly shorten to list
-teams_chat_label = Label(master, text='Shorten to Bitly URL (Needs "https://"): \n Join Microsoft Teams Chat').place(x=400, y=505, anchor="w")
+teams_chat_label = Label(master, text='Shorten to Bitly URL (Needs "https://"): \n '
+                                      'Join Microsoft Teams Chat', justify="left").place(x=400, y=505, anchor="w")
 bitly_url = StringVar()
 bitly_url.set("https://www.google.com")
 teams_chat_entry_box = Entry(master, textvariable=bitly_url, width=50).place(x=400, y=520, height=25)
@@ -351,10 +355,9 @@ def select_operators():
     splash_window.mainloop()
 
 
-#Operator Buttons
+# Operator Buttons
 operator_button = Button(master, text="Operators", command=lambda: select_operators())
 operator_button.place(y=230, x=0)
-
 
 
 def print_template():
@@ -394,7 +397,7 @@ Join Microsoft Teams Chat: {shortener(bitly_url)}
         l.pack()
         T.pack()
         b2.pack()
-        T.insert(tk.END, final)
+        T.insert(END, final)
 
     except NameError:
         messagebox.showerror('Error', 'Incorrect or Incomplete Information.')
@@ -403,7 +406,7 @@ Join Microsoft Teams Chat: {shortener(bitly_url)}
         messagebox.showerror('Error', 'Incorrect or Incomplete Information.')
         pass
 
-    tk.mainloop()
+    mainloop()
 
 
 print_button = Button(master, text="Print", command=lambda: print_template())
