@@ -6,10 +6,8 @@ from bitlyshortener import *
 import datetime
 from datetime import date
 
-
-
+# Main Window
 master = Tk()
-
 app_width = 800
 app_height = 600
 screen_width = master.winfo_screenwidth()
@@ -17,7 +15,7 @@ screen_height = master.winfo_screenheight()
 x = (screen_width / 2) - (app_width / 2)
 y = (screen_height / 2) - (app_height / 2)
 master.geometry(f'{app_width}x{app_height}+{int(x)}+{int(y)}')  # main window start in the center of the screen
-master.title('High Sev Escalation App --Version 1.0')
+master.title('High Sev Escalation App --Version 2.0')
 
 status = ["New",
           "New/Resolved",
@@ -39,7 +37,6 @@ operator = ["all", "TEG1", "GT", "TEG2", "BBIN_CNY", "TEG3", "JuGaming(A)",
             "AMBGAMESSW" "pay4dsw",
             "Sempris", "W88", "Wild_Treasure", "188bet", "Asiabet", "Solid_Gaming", "GSD", "Foxnos", "M88",
             "Asian_Logic", "VWIN", "SBO"]
-time_elapsed = []
 service_degradation = ["N/A", "25%", "Over 25%", "50%", "Over 50%", "75%", "Over 75%", "100%"]
 root_cause = ["N/A", "Internal", "Operator", "Regular Maintenance", "Network", "Internal-3rd Party", "Internal-MG+",
               "Unknown"]
@@ -87,23 +84,20 @@ tier_variable.set(tier[0])  # default value
 tier_options = OptionMenu(master, tier_variable, *tier)
 tier_options.place(y=193, x=0)
 
-
-
+# Start Time
 start_time_label = Label(master, text="Date & Start Time (GMT+8):").place(x=0, y=305)
 start_time = StringVar()
 start_time.set("10:30")
-start_time_entry_box = Entry(master, textvariable=start_time, width=0).place(x=80, y=325, height=25)
-
+start_time_entry_box = Entry(master, textvariable=start_time, width=0).place(x=100, y=325, height=25)
 
 # End Time
 end_time_label = Label(master, text="Date & Now/End Time (GMT+8):").place(x=0, y=355)
 end_time = StringVar()
 end_time.set("11:30")
-end_time_entry_box = Entry(master, textvariable=end_time, width=0).place(x=80, y=375, height=25)
+end_time_entry_box = Entry(master, textvariable=end_time, width=0).place(x=100, y=375, height=25)
 
 
-
-# Time Elapsed
+# Time Elapsed for Hours and Minutes
 def elapsed_time(start, end):
     a = datetime.datetime.strptime(start, '%H:%M')
     b = datetime.datetime.strptime(end, '%H:%M')
@@ -122,11 +116,53 @@ def elapsed_time(start, end):
         pass
 
 
+# Time Elapsed for Days and Dates
+year1_str = StringVar()
+year1_str.set("YYYY")
+year1 = Entry(master, textvariable=year1_str, width=0).place(x=0, y=325, height=25)
+year1_int = year1
+
+month1_str = StringVar()
+month1_str.set("M")
+month1 = Entry(master, textvariable=month1_str, width=0).place(x=40, y=325, height=25)
+month1_int = month1
+
+day1_str = StringVar()
+day1_str.set("D")
+day1 = Entry(master, textvariable=day1_str, width=0).place(x=70, y=325, height=25)
+day1_int = day1
+
+year2_str = StringVar()
+year2_str.set("YYYY")
+year2 = Entry(master, textvariable=year2_str, width=0).place(x=0, y=375, height=25)
+year_int = year2
+
+month2_str = StringVar()
+month2_str.set("M")
+month2 = Entry(master, textvariable=month2_str, width=0).place(x=40, y=375, height=25)
+month2_int = month2
+
+day2_str = StringVar()
+day2_str.set("D")
+day2 = Entry(master, textvariable=day2_str, width=0).place(x=70, y=375, height=25)
+day2_int = day2
+
+
+def numOfDays(year1, month1, day1, year2, month2, day2):
+    date1 = date(year1, month1, day1)
+    date2 = date(year2, month2, day2)
+    date_diff = (date2 - date1).days
+    if date_diff > 0:
+        return " "+str(date_diff) +"d"
+    else:
+        return str("")
+
+
+
 # elapsed_time_label = Label(master, text=f"Time Elapsed:").place(x=0, y=260)
 # elapsed_time = StringVar()
 # elapsed_time.set("N/A")
 # elapsed_time_entry_box = Entry(master, textvariable=elapsed_time, width=20).place(x=0, y=280, height=25)
-
 
 # Service Degradation
 service_degradation_label = Label(master, text="Service Degradation").place(x=0, y=400)
@@ -207,7 +243,6 @@ def shortener(url):
         return str("N/A")
 
 
-
 def select_affecting_system():
     splash_window = Tk()
     splash_window.title("Select Affecting System")
@@ -247,7 +282,6 @@ def select_affecting_system():
         splash_window.destroy()
 
     pick_button = Button(splash_window, text="Select", command=lambda: close_window()).pack(pady=20)
-
 
     splash_window.mainloop()
 
@@ -328,7 +362,7 @@ Name: {name.get()}
 Affecting System: {', '.join(items)}
 Tier: {tier_variable.get()}
 Operator: {', '.join(op_items)}
-Time Elapsed: {elapsed_time(start_time.get(), end_time.get())}
+Time Elapsed:{numOfDays(int(year1_str.get()), int(month1_str.get()), int(day1_str.get()), int(year2_str.get()), int(month2_str.get()), int(day2_str.get()))} {elapsed_time(start_time.get(), end_time.get())}
 Start Time: {start_time.get()} (GMT+8)
 End Time: {end_time.get()} (GMT+8)
 Service Degradation: {service_degradation_variable.get()}
@@ -367,10 +401,10 @@ Join Microsoft Teams Chat: {shortener(bitly_url)}
     tk.mainloop()
 
 
-print_button = Button(master, text="Print With Teams Chat", command=lambda: print_template())
-print_button.place(y=0, x=400)
-print_button = Button(master, text="Affecting System", command=lambda: select_affecting_system())
-print_button.place(y=147, x=0)
+print_button = Button(master, text="Print", command=lambda: print_template())
+print_button.place(y=0, x=350)
+af_print_button = Button(master, text="Affecting System", command=lambda: select_affecting_system())
+af_print_button.place(y=147, x=0)
 clear_affecting_system_button = Button(master, text="Clear", command=lambda: clear_affecting_systems())
 clear_affecting_system_button.place(y=147, x=103)
 print_button = Button(master, text="Operators", command=lambda: select_operators())
