@@ -6,9 +6,6 @@ from bitlyshortener import *
 import datetime
 from datetime import date
 
-# Bitly Setup
-tokens_pool = ['d2375064d1ef535690914f2d2d96d7390b41fb10']  # Use your own API key.
-shortener = bitlyshortener.Shortener(tokens=tokens_pool, max_cache_size=256)
 
 
 master = Tk()
@@ -92,22 +89,21 @@ tier_options.place(y=193, x=0)
 
 
 
-start_time_label = Label(master, text="Start Time:").place(x=0, y=305)
+start_time_label = Label(master, text="Date & Start Time (GMT+8):").place(x=0, y=305)
 start_time = StringVar()
 start_time.set("10:30")
-start_time_entry_box = Entry(master, textvariable=start_time, width=20).place(x=0, y=325, height=25)
+start_time_entry_box = Entry(master, textvariable=start_time, width=0).place(x=80, y=325, height=25)
 
 
 # End Time
-end_time_label = Label(master, text="End Time:").place(x=0, y=355)
+end_time_label = Label(master, text="Date & Now/End Time (GMT+8):").place(x=0, y=355)
 end_time = StringVar()
 end_time.set("11:30")
-end_time_entry_box = Entry(master, textvariable=end_time, width=20).place(x=0, y=375, height=25)
+end_time_entry_box = Entry(master, textvariable=end_time, width=0).place(x=80, y=375, height=25)
 
 
 
 # Time Elapsed
-
 def elapsed_time(start, end):
     a = datetime.datetime.strptime(start, '%H:%M')
     b = datetime.datetime.strptime(end, '%H:%M')
@@ -116,18 +112,17 @@ def elapsed_time(start, end):
 
     hours = int(diff.seconds // (60 * 60))
     mins = int((diff.seconds // 60) % 60)
-
     if hours > 0 and mins > 0:
-        return (str(hours) + "h " + (str(mins) + "m"))
+        return str(hours) + "h " + (str(mins) + "m")
     elif hours > 0:
-        return (str(hours) + "h")
+        return str(hours) + "h"
     elif mins > 0:
-        return (str(mins) + "m")
+        return str(mins) + "m"
     else:
         pass
 
 
-elapsed_time_label = Label(master, text="Time Elapsed:").place(x=0, y=260)
+# elapsed_time_label = Label(master, text=f"Time Elapsed:").place(x=0, y=260)
 # elapsed_time = StringVar()
 # elapsed_time.set("N/A")
 # elapsed_time_entry_box = Entry(master, textvariable=elapsed_time, width=20).place(x=0, y=280, height=25)
@@ -179,7 +174,7 @@ crisis_manager_options.place(y=320, x=400)
 # Escalated by
 escalated_by_label = Label(master, text="Escalated by:").place(x=400, y=350)
 escalated_by = StringVar()
-escalated_by.set("<name>(+886 226 560 700 ext 207)")
+escalated_by.set("<name> (+886 226 560 700 ext 207)")
 escalated_by_entry_box = Entry(master, textvariable=escalated_by, width=50).place(x=400, y=370, height=25)
 
 # Clik ID
@@ -195,9 +190,21 @@ customer_ref.set("N/A")
 customer_ref_entry_box = Entry(master, textvariable=customer_ref, width=50).place(x=400, y=460, height=25)
 
 # Teams Chat/Bitly shorten to list
-teams_chat_label = Label(master, text='Shorten to Bitly URL (Needs "HTTP/S"): \n Join Microsoft Teams Chat').place(x=400, y=505, anchor="w")
+teams_chat_label = Label(master, text='Shorten to Bitly URL (Needs "https://"): \n Join Microsoft Teams Chat').place(x=400, y=505, anchor="w")
 bitly_url = StringVar()
+bitly_url.set("https://www.google.com")
 teams_chat_entry_box = Entry(master, textvariable=bitly_url, width=50).place(x=400, y=520, height=25)
+
+# Bitly Setup
+def shortener(url):
+    url = bitly_url.get()
+    tokens_pool = ['d2375064d1ef535690914f2d2d96d7390b41fb10']  # Use your own API key.
+    shortener = bitlyshortener.Shortener(tokens=tokens_pool, max_cache_size=256)
+
+    if url != "":
+        return str(','.join(shortener.shorten_urls([bitly_url.get()])))
+    else:
+        return str("N/A")
 
 
 
@@ -312,61 +319,6 @@ def clear_operators():
     overwrite_op_label.place(y=230, x=110)
 
 
-
-def print_new():
-    def set_bold():
-        try:
-            T.tag_add('bold', 'sel.first', 'sel.last')
-        except Exception as ex:
-            # text not selected
-            print(ex)
-
-    try:
-        final = f"""
-Status: {status_variable.get()}
-Severity: {severity_variable.get()}
-Name: {name.get()}
-Affecting System: {', '.join(items)}
-Tier: {tier_variable.get()}
-Operator: {', '.join(op_items)}
-Time Elapsed: 
-Start Time: {start_time.get()} (GMT+8)
-End Time: {end_time.get()} 
-Service Degradation: {service_degradation_variable.get()}
-Symptoms: {symptoms.get()}
-Action Taken: {action_taken.get("1.0", "end-1c")}
-Root Cause: {root_cause_variable.get()}
-Comms Manager: {comms_manager_variable.get()}
-Crisis Manager: {crisis_manager_variable.get()}
-Escalated by: {escalated_by.get()}
-
-Clik ID: {clik_id.get()}
-Customer Ref#: {customer_ref.get()}
-
-Join Microsoft Teams Chat: N/A
-
-"""
-        root = Tk()
-        root.geometry("800x500")
-        T = Text(root, height=80, width=80)
-        l = Label(root, text="Template")
-        l.config(font=("Courier", 14))
-        b2 = Button(root, text="Exit", command=root.destroy)
-
-        l.pack()
-        T.pack()
-        b2.pack()
-
-        T.insert(tk.END, final)
-
-
-    except NameError:
-        messagebox.showerror('Error', 'Missing Info.')
-        pass
-
-    tk.mainloop()
-
-
 def print_template():
     try:
         final = f"""
@@ -390,7 +342,7 @@ Escalated by: {escalated_by.get()}
 Clik ID: {clik_id.get()}
 Customer Ref#: {customer_ref.get()}
 
-Join Microsoft Teams Chat: {','.join(shortener.shorten_urls([bitly_url.get()]))}
+Join Microsoft Teams Chat: {shortener(bitly_url)}
 
     """
         root = Tk()
@@ -408,11 +360,13 @@ Join Microsoft Teams Chat: {','.join(shortener.shorten_urls([bitly_url.get()]))}
     except NameError:
         messagebox.showerror('Error', 'Missing Info')
         pass
+    except ValueError:
+        messagebox.showerror('Error', 'Missing Info')
+        pass
 
     tk.mainloop()
 
-print_button = Button(master, text="Print New", command=lambda: print_new())
-print_button.place(y=0, x=300)
+
 print_button = Button(master, text="Print With Teams Chat", command=lambda: print_template())
 print_button.place(y=0, x=400)
 print_button = Button(master, text="Affecting System", command=lambda: select_affecting_system())
