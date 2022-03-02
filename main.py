@@ -409,7 +409,7 @@ Join Microsoft Teams Chat: {shortener(bitly_url)}
     """
         root = Tk()
         root.geometry("800x500")
-        T = Text(root, height=80, width=80)
+        T = Text(root, height=30, width=80)
         l = Label(root, text="Template")
         l.config(font=("Courier", 14))
         b2 = Button(root, text="Exit", command=root.destroy)
