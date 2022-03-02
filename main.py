@@ -1,4 +1,4 @@
-from tkinter import Tk, Label, StringVar, OptionMenu, Entry, Text, Scrollbar, RIGHT, Y, Listbox, YES, Button, mainloop,\
+from tkinter import Tk, Label, StringVar, OptionMenu, Entry, Text, Scrollbar, RIGHT, Y, Listbox, YES, Button, mainloop, \
     messagebox, END, Frame
 import bitlyshortener
 import time
@@ -15,7 +15,6 @@ y = (screen_height / 2) - (app_height / 2)
 master.geometry(f'{app_width}x{app_height}+{int(x)}+{int(y)}')  # main window start in the center of the screen
 master.title('High Sev Escalation App --Version 3.0')
 
-
 status = ["New",
           "New/Resolved",
           "Updated",
@@ -28,7 +27,8 @@ status = ["New",
 
 severity = ["A", "B"]
 
-affecting_system = ["all", "Live Dealer", "TNGQuickfire", "MGP SW", "QF2", "Sempris", "TEG0", "TEG1", "TEG2", "TEG3", "TEG4", "TEG6"]
+affecting_system = ["all", "Live Dealer", "TNGQuickfire", "MGP SW", "QF2", "Sempris", "TEG0", "TEG1", "TEG2", "TEG3",
+                    "TEG4", "TEG6"]
 
 tier = ["N/A", "Tier_1", "Tier_2"]
 
@@ -173,7 +173,7 @@ def num_of_days(year1, month1, day1, year2, month2, day2):
     date2 = date(year2, month2, day2)
     date_diff = (date2 - date1).days
     if date_diff > 0:
-        return " "+str(date_diff) + "d"
+        return " " + str(date_diff) + "d"
     else:
         return str("")
 
@@ -209,8 +209,8 @@ symptoms.place(x=0, y=470, height=100, width=390)
 action_taken_label = Label(master, text="Action Taken").place(x=550, y=20)
 action_taken = Text(master)
 action_taken.insert("3.0", "Internal testing showed no errors on our system. "
-                    "ITOC is contacting relevant teams. "
-                    "ITOC is checking with the operator.")
+                           "ITOC is contacting relevant teams. "
+                           "ITOC is checking with the operator.")
 action_taken.place(x=400, y=40, width=390, height=100)
 action_taken.get("1.0", "end-1c")
 
@@ -307,7 +307,8 @@ def select_affecting_system():
 
     def select():
         global af_label
-        af_label = Label(af_frame, text=(', '.join(items)), wraplength=240, justify="center")  # Displays current selection
+        af_label = Label(af_frame, text=(', '.join(items)), wraplength=240,
+                         justify="center")  # Displays current selection
         af_label.pack()
         splash_window.destroy()
 
@@ -324,7 +325,6 @@ af_button.place(y=147, x=0)
 # Affecting System Frame
 af_frame = Frame(master, width=235, height=80)
 af_frame.place(x=150, y=150)
-
 
 
 # Select operators from a listbox
@@ -379,59 +379,55 @@ op_frame = Frame(master, width=170, height=80)
 op_frame.place(x=230, y=230)
 
 
-
 def print_template():
+    global T
     try:
-        final = f"""
-Status: {status_variable.get()}
-Severity: {severity_variable.get()}
-Name: {name.get()}
-Affecting System: {', '.join(items)}
-Tier: {tier_variable.get()}
-Operator: {', '.join(op_items)}
-Time Elapsed:{num_of_days(int(year1_str.get()), int(month1_str.get()), int(day1_str.get()), int(year2_str.get()),
-                          int(month2_str.get()), int(day2_str.get()))} {elapsed_time(start_time.get(), end_time.get())}
-Start Time: {year1_str.get()}-{month1_str.get()}-{day1_str.get()} {start_time.get()} (GMT+8)
-End Time: {resolved_checker()}
-Service Degradation: {service_degradation_variable.get()}
-Symptoms: {symptoms.get("1.0","end-1c")}
-Action Taken: {action_taken.get("1.0", "end-1c")}
-Root Cause: {root_cause_variable.get()}
-Comms Manager: {comms_manager_variable.get()}
-Crisis Manager: {crisis_manager_variable.get()}
-Escalated by: {escalated_by.get()}
-
-Clik ID: {clik_id.get()}
-Customer Ref#: {customer_ref.get()}
-
-Join Microsoft Teams Chat: {shortener(bitly_url)}
-
-    """
         root = Tk()
         root.geometry("800x500")
         root.title("High Sev Escalation")
-        T = Text(root, height=30, width=80)
+        T = Text(root, height=30, width=80, font=('Helvetica', 18, 'bold'))
         l = Label(root, text="Template")
         l.config(font=("Courier", 14))
         b2 = Button(root, text="Exit", command=root.destroy)
-
         l.pack()
         T.pack()
         b2.pack()
-        T.insert(END, final)
+        T.insert(END,
+                 f"Status: {status_variable.get()}\n"
+                 f"Severity: {severity_variable.get()}\n"
+                 f"Name: {name.get()}\n"
+                 f"Affecting System: {', '.join(items)}\n"
+                 f"Tier: {tier_variable.get()}\n"
+                 f"Operator: {', '.join(op_items)}\n"
+                 f"""Time Elapsed:{num_of_days(int(year1_str.get()), int(month1_str.get()), int(day1_str.get()), int(year2_str.get()),
+                                               int(month2_str.get()), int(day2_str.get()))} {elapsed_time(start_time.get(), end_time.get())}\n"""
+                 f"Start Time: {year1_str.get()}-{month1_str.get()}-{day1_str.get()} {start_time.get()} (GMT+8)\n"
+                 f"End Time: {resolved_checker()}\n"
+                 f"Service Degradation: {service_degradation_variable.get()}\n"
+                 f"Symptoms: {symptoms.get('1.0', 'end-1c')}\n"
+                 f"Action Taken: {action_taken.get('1.0', 'end-1c')}\n"
+                 f"Root Cause: {root_cause_variable.get()}\n"
+                 f"Comms Manager: {comms_manager_variable.get()}\n"
+                 f"Crisis Manager: {crisis_manager_variable.get()}\n"
+                 f"Escalated by: {escalated_by.get()}\n\n"
 
+                 f"Clik ID: {clik_id.get()}\n"
+                 f"Customer Ref#: {customer_ref.get()}\n\n"
+
+                 f"Join Microsoft Teams Chat: {shortener(bitly_url)}"
+                 )
     except NameError:
-        messagebox.showerror('Error', 'Incorrect or Incomplete Information.')
+        T.insert(END, 'There is an error! Please check the minimum required fields for an escalation.')
         pass
     except ValueError:
-        messagebox.showerror('Error', 'Incorrect or Incomplete Information.')
+        T.insert(END, 'There is an error! Please check the minimum required fields for an escalation.')
         pass
 
-    mainloop()
+
+        mainloop()
 
 
 print_button = Button(master, text="Print", command=lambda: print_template())
 print_button.place(y=0, x=350)
-
 
 mainloop()
