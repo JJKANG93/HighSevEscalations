@@ -1,5 +1,5 @@
-from tkinter import Tk, Label, StringVar, OptionMenu, Entry, Text, Scrollbar, RIGHT, Y, Listbox, YES, Button, mainloop, \
-    messagebox, END, Frame
+from tkinter import Tk, Label, StringVar, OptionMenu, Entry, Text, Scrollbar, RIGHT, Y, Listbox, YES, Button, mainloop,\
+    END, Frame
 import bitlyshortener
 import time
 from datetime import date, datetime
@@ -383,9 +383,8 @@ def print_template():
     global T
     try:
         root = Tk()
-        root.geometry("800x500")
         root.title("High Sev Escalation")
-        T = Text(root, height=30, width=80, font=('Helvetica', 18, 'bold'))
+        T = Text(root, height=25, width=80, font=('Helvetica', 18, 'bold'))
         l = Label(root, text="Template")
         l.config(font=("Courier", 14))
         b2 = Button(root, text="Exit", command=root.destroy)
