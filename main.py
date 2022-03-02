@@ -375,7 +375,7 @@ operator_button = Button(master, text="Operators:", command=lambda: select_opera
 operator_button.place(y=230, x=0)
 
 # Operator Frame
-op_frame = Frame(master, width=220, height=80)
+op_frame = Frame(master, width=170, height=80)
 op_frame.place(x=230, y=230)
 
 
