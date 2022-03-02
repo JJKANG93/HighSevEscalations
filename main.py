@@ -1,5 +1,5 @@
 from tkinter import Tk, Label, StringVar, OptionMenu, Entry, Text, Scrollbar, RIGHT, Y, Listbox, YES, Button, mainloop,\
-    messagebox, END, LabelFrame
+    messagebox, END, Frame
 import bitlyshortener
 import time
 from datetime import date, datetime
@@ -25,9 +25,13 @@ status = ["New",
           "Re-occurring",
           "Re-occurring/Resolved",
           "Cancelled"]
+
 severity = ["A", "B"]
+
 affecting_system = ["all", "TNGQuickfire", "MGP SW", "QF2", "Sempris", "TEG0", "TEG1", "TEG2", "TEG3", "TEG4", "TEG6"]
+
 tier = ["N/A", "Tier_1", "Tier_2"]
+
 operator = ["all", "TEG1", "GT", "TEG2", "BBIN_CNY", "TEG3", "JuGaming(A)",
             "TEG4", "JuGamingA(6)", "JuGamingA(12)", "JuGamingA(18)", "JuGamingA(25)",
             "JuGamingA(28)", "TEG6", "Oriental_Game", "OG", "TEG0", "Power_Asia", "infini88",
@@ -36,9 +40,12 @@ operator = ["all", "TEG1", "GT", "TEG2", "BBIN_CNY", "TEG3", "JuGaming(A)",
             "AMBGAMESSW", "pay4dsw",
             "Sempris", "W88", "Wild_Treasure", "188bet", "Asiabet", "Solid_Gaming", "GSD", "Foxnos", "M88",
             "Asian_Logic", "VWIN", "SBO"]
+
 service_degradation = ["N/A", "25%", "Over 25%", "50%", "Over 50%", "75%", "Over 75%", "100%"]
+
 root_cause = ["N/A", "Internal", "Operator", "Regular Maintenance", "Network", "Internal-3rd Party", "Internal-MG+",
               "Unknown"]
+
 comms_manager = ["Abri Liebenberg (+61 432823087)",
                  "Matt Cheng (+886 932075280)",
                  "Matthew Geoghegan (+886 905249541)",
@@ -47,6 +54,7 @@ comms_manager = ["Abri Liebenberg (+61 432823087)",
                  "Jill Shen (+886 903438345)",
                  "Frank Hsu (+886 972211756)",
                  "Juan Gilpin (+886 909948943)"]
+
 crisis_manager = ["Abri Liebenberg (+61 432823087)",
                   "Matt Cheng (+886 932075280)",
                   "Matthew Geoghegan (+886 905249541)",
@@ -299,8 +307,8 @@ def select_affecting_system():
 
     def select():
         global af_label
-        af_label = Label(master, text=(', '.join(items)), wraplength=240, justify="right")  # Displays current selection
-        af_label.place(y=147, x=150)
+        af_label = Label(af_frame, text=(', '.join(items)), wraplength=240, justify="center")  # Displays current selection
+        af_label.pack()
         splash_window.destroy()
 
     select_button = Button(splash_window, text="Select", command=lambda: select()).pack(pady=0)
@@ -310,8 +318,13 @@ def select_affecting_system():
 
 
 # Affecting System Buttons
-af_button = Button(master, text="Affecting System", command=lambda: select_affecting_system())
+af_button = Button(master, text="Affecting System:", command=lambda: select_affecting_system())
 af_button.place(y=147, x=0)
+
+# Affecting System Frame
+af_frame = Frame(master, width=235, height=80)
+af_frame.place(x=150, y=150)
+
 
 
 # Select operators from a listbox
@@ -347,8 +360,8 @@ def select_operators():
 
     def select():
         global op_label
-        op_label = Label(master, text=(', '.join(op_items)), wraplength=120, justify="center")
-        op_label.place(y=230, x=280)
+        op_label = Label(op_frame, text=(', '.join(op_items)), wraplength=120, justify="left")
+        op_label.pack()
         splash_window.destroy()
 
     select_button = Button(splash_window, text="Select", command=lambda: select()).pack(pady=0)
@@ -358,8 +371,13 @@ def select_operators():
 
 
 # Operator Buttons
-operator_button = Button(master, text="Operators", command=lambda: select_operators())
+operator_button = Button(master, text="Operators:", command=lambda: select_operators())
 operator_button.place(y=230, x=0)
+
+# Operator Frame
+op_frame = Frame(master, width=220, height=80)
+op_frame.place(x=230, y=230)
+
 
 
 def print_template():
