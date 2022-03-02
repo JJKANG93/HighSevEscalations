@@ -409,6 +409,7 @@ Join Microsoft Teams Chat: {shortener(bitly_url)}
     """
         root = Tk()
         root.geometry("800x500")
+        root.title("High Sev Escalation")
         T = Text(root, height=30, width=80)
         l = Label(root, text="Template")
         l.config(font=("Courier", 14))
