@@ -24,11 +24,11 @@ status = ["New",
           "Resolved",
           "Re-occurring",
           "Re-occurring/Resolved",
-          "Cancelled"]
+          "Canceled"]
 
 severity = ["A", "B"]
 
-affecting_system = ["all", "TNGQuickfire", "MGP SW", "QF2", "Sempris", "TEG0", "TEG1", "TEG2", "TEG3", "TEG4", "TEG6"]
+affecting_system = ["all", "Live Dealer", "TNGQuickfire", "MGP SW", "QF2", "Sempris", "TEG0", "TEG1", "TEG2", "TEG3", "TEG4", "TEG6"]
 
 tier = ["N/A", "Tier_1", "Tier_2"]
 
