@@ -1,6 +1,7 @@
 from tkinter import Tk, Label, StringVar, OptionMenu, Entry, Text, Scrollbar, RIGHT, Y, Listbox, YES, Button, mainloop,\
     END, Frame
 import bitlyshortener
+from bitlyshortener.exc import RequestError, ArgsError, ShortenerError
 import time
 from datetime import date, datetime
 
@@ -13,7 +14,7 @@ screen_height = master.winfo_screenheight()
 x = (screen_width / 2) - (app_width / 2)
 y = (screen_height / 2) - (app_height / 2)
 master.geometry(f'{app_width}x{app_height}+{int(x)}+{int(y)}')  # main window start in the center of the screen
-master.title('High Sev Escalation App --Version 3.0')
+master.title('High Sev Escalation App --Version 3.5')
 
 status = ["New",
           "New/Resolved",
@@ -53,7 +54,11 @@ comms_manager = ["Abri Liebenberg (+61 432823087)",
                  "Jeff Huang (+886 933308768)",
                  "Jill Shen (+886 903438345)",
                  "Frank Hsu (+886 972211756)",
-                 "Juan Gilpin (+886 909948943)"]
+                 "Juan Gilpin (+886 909948943)"
+                 "Ran Alkalay",
+                 "Arik Klein",
+                 "Jamil Saab",
+                 "Yaacov Pines"]
 
 crisis_manager = ["Abri Liebenberg (+61 432823087)",
                   "Matt Cheng (+886 932075280)",
@@ -62,7 +67,12 @@ crisis_manager = ["Abri Liebenberg (+61 432823087)",
                   "Jeff Huang (+886 933308768)",
                   "Jill Shen (+886 903438345)",
                   "Frank Hsu (+886 972211756)",
-                  "Juan Gilpin (+886 909948943)"]
+                  "Juan Gilpin (+886 909948943)",
+                  "Ran Alkalay",
+                  "Arik Klein",
+                  "Jamil Saab",
+                  "Yaacov Pines"]
+
 
 # Status Dropdown Menu
 status_label = Label(master, text="Status").place(x=0, y=0)
@@ -270,7 +280,14 @@ def shortener(url):
     if url == "N/A":
         return url
     elif url != "":
-        return str(','.join(shortener.shorten_urls([bitly_url.get()])))
+        try:
+            return str(','.join(shortener.shorten_urls([bitly_url.get()])))
+        except RequestError:
+            return str("N/A")
+        except ArgsError:
+            return str("N/A")
+        except ShortenerError:
+            return str("N/A")
     else:
         return str("N/A")
 
@@ -384,7 +401,7 @@ def print_template():
     try:
         root = Tk()
         root.title("High Sev Escalation")
-        T = Text(root, height=25, width=80, font=('Helvetica', 18, 'bold'))
+        T = Text(root, height=25, width=80)
         l = Label(root, text="Template")
         l.config(font=("Courier", 14))
         b2 = Button(root, text="Exit", command=root.destroy)
@@ -398,8 +415,7 @@ def print_template():
                  f"Affecting System: {', '.join(items)}\n"
                  f"Tier: {tier_variable.get()}\n"
                  f"Operator: {', '.join(op_items)}\n"
-                 f"""Time Elapsed:{num_of_days(int(year1_str.get()), int(month1_str.get()), int(day1_str.get()), int(year2_str.get()),
-                                               int(month2_str.get()), int(day2_str.get()))} {elapsed_time(start_time.get(), end_time.get())}\n"""
+                 f"Time Elapsed:{num_of_days(int(year1_str.get()), int(month1_str.get()), int(day1_str.get()), int(year2_str.get()), int(month2_str.get()), int(day2_str.get()))} {elapsed_time(start_time.get(), end_time.get())}\n"
                  f"Start Time: {year1_str.get()}-{month1_str.get()}-{day1_str.get()} {start_time.get()} (GMT+8)\n"
                  f"End Time: {resolved_checker()}\n"
                  f"Service Degradation: {service_degradation_variable.get()}\n"
