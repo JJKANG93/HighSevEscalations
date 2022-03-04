@@ -433,7 +433,8 @@ def print_template():
                         html_text.append(TAG_TO_HTML.get((key, value), ''))
                 klembord.set_with_rich_text(txt, ''.join(html_text))
                 return "break"  # prevent class binding to be triggered
-            T.insert("end", "Status: ", "bold")
+
+            T.insert("end", "Status: ", "bold"),
             T.insert("end", f"{status_variable.get()}\n")
             T.insert("end", "Severity: ", "bold")
             T.insert("end", f"{severity_variable.get()}\n")
@@ -471,7 +472,27 @@ def print_template():
             T.insert("end", f"{customer_ref.get()}\n\n")
             T.insert("end", "Join Microsoft Teams Chat: ", "bold")
             T.insert("end", f"{shortener(bitly_url)}")
-
+            klembord.set_with_rich_text('Status', f'<b>Status: </b>{status_variable.get()}'
+                                                  f'<br><b>Severity: </b>{severity_variable.get()}'
+                                                  f'<br><b>Name: </b>{name.get()}'
+                                                  f'<br><b>Affecting System: </b>{", ".join(items)}'
+                                                  f'<br><b>Tier: </b>{tier_variable.get()}'
+                                                  f'<br><b>Operator: </b>{", ".join(op_items)}'
+                                                  f'<br><b>Time Elapsed: </b>{num_of_days(int(year1_str.get()), int(month1_str.get()), int(day1_str.get()), int(year2_str.get()), int(month2_str.get()), int(day2_str.get()))} {elapsed_time(start_time.get(), end_time.get())}'
+                                                  f'<br><b>Start Time: </b>{year1_str.get()}-{month1_str.get()}-{day1_str.get()} {start_time.get()} (GMT+8)'
+                                                  f'<br><b>End Time: </b>{resolved_checker()}'
+                                                  f'<br><b>Service Degradation: </b>{service_degradation_variable.get()}'
+                                                  f'<br><b>Symptoms: </b>{symptoms.get("1.0","end-1c")}'
+                                                  f'<br><b>Action Taken: </b>{action_taken.get("1.0", "end-1c")}'
+                                                  f'<br><b>Root Cause: </b>{root_cause_variable.get()}'
+                                                  f'<br><b>Comms Manager: </b>{comms_manager_variable.get()}'
+                                                  f'<br><b>Crisis Manager: </b>{crisis_manager_variable.get()}'
+                                                  f'<br><b>Escalated by: </b>{escalated_by.get()}'
+                                                  f'<br>'
+                                                  f'<br><b>Clik ID: </b>{clik_id.get()}'
+                                                  f'<br><b>Customer Ref#: </b>{customer_ref.get()}'
+                                                  f'<br>'
+                                                  f'<br><b>Join Microsoft Teams Chat: </b>{shortener(bitly_url)}')
         except NameError:
             T.insert(END, f"There is an error! Please check the minimum required fields for an escalation.")
             pass
