@@ -1,5 +1,5 @@
 from tkinter import Tk, Label, StringVar, OptionMenu, Entry, Text, Scrollbar, RIGHT, Y, Listbox, YES, Button, mainloop, \
-    END, Frame, messagebox
+    END, Frame, messagebox, TclError
 import bitlyshortener
 from bitlyshortener.exc import RequestError, ArgsError, ShortenerError
 import time
@@ -184,7 +184,7 @@ def num_of_days(year1, month1, day1, year2, month2, day2):
     date2 = date(year2, month2, day2)
     date_diff = (date2 - date1).days
     if date_diff > 0:
-        return " " + str(date_diff) + "d"
+        return str(date_diff) + "d"
     else:
         return str("")
 
@@ -412,29 +412,66 @@ def print_template():
             l.pack()
             T.pack()
             b2.pack()
-            T.insert(END,
-                     f"Status: {status_variable.get()}\n"
-                     f"Severity: {severity_variable.get()}\n"
-                     f"Name: {name.get()}\n"
-                     f"Affecting System: {', '.join(items)}\n"
-                     f"Tier: {tier_variable.get()}\n"
-                     f"Operator: {', '.join(op_items)}\n"
-                     f"Time Elapsed:{num_of_days(int(year1_str.get()), int(month1_str.get()), int(day1_str.get()), int(year2_str.get()), int(month2_str.get()), int(day2_str.get()))} {elapsed_time(start_time.get(), end_time.get())}\n"
-                     f"Start Time: {year1_str.get()}-{month1_str.get()}-{day1_str.get()} {start_time.get()} (GMT+8)\n"
-                     f"End Time: {resolved_checker()}\n"
-                     f"Service Degradation: {service_degradation_variable.get()}\n"
-                     f"Symptoms: {symptoms.get('1.0', 'end-1c')}\n"
-                     f"Action Taken: {action_taken.get('1.0', 'end-1c')}\n"
-                     f"Root Cause: {root_cause_variable.get()}\n"
-                     f"Comms Manager: {comms_manager_variable.get()}\n"
-                     f"Crisis Manager: {crisis_manager_variable.get()}\n"
-                     f"Escalated by: {escalated_by.get()}\n\n"
-    
-                     f"Clik ID: {clik_id.get()}\n"
-                     f"Customer Ref#: {customer_ref.get()}\n\n"
-    
-                     f"Join Microsoft Teams Chat: {shortener(bitly_url)}"
-                     )
+            T.tag_configure('bold', font='TkDefaultFont 9 bold')
+            TAG_TO_HTML = {
+                ('tagon', 'bold'): '<b>',
+                ('tagoff', 'bold'): '</b>',
+                        }
+
+            def copy_rich_text(event):
+                try:
+                    txt = T.get('sel.first', 'sel.last')
+                except TclError:
+                    # no selection
+                    return "break"
+                content = T.dump('sel.first', 'sel.last', tag=True, text=True)
+                html_text = []
+                for key, value, index in content:
+                    if key == "text":
+                        html_text.append(value)
+                    else:
+                        html_text.append(TAG_TO_HTML.get((key, value), ''))
+                klembord.set_with_rich_text(txt, ''.join(html_text))
+                return "break"  # prevent class binding to be triggered
+            T.insert("end", "Status: ", "bold")
+            T.insert("end", f"{status_variable.get()}\n")
+            T.insert("end", "Severity: ", "bold")
+            T.insert("end", f"{severity_variable.get()}\n")
+            T.insert("end", "Name: ", "bold")
+            T.insert("end", f"{name.get()}\n")
+            T.insert("end", "Affecting System: ", "bold")
+            T.insert("end", f"{', '.join(items)}\n")
+            T.insert("end", "Tier: ", "bold")
+            T.insert("end", f"{tier_variable.get()}\n")
+            T.insert("end", "Operator: ", "bold")
+            T.insert("end", f"{', '.join(op_items)}\n")
+            T.insert("end", "Time Elapsed: ", "bold")
+            T.insert("end", f"{num_of_days(int(year1_str.get()), int(month1_str.get()), int(day1_str.get()), int(year2_str.get()), int(month2_str.get()), int(day2_str.get()))} {elapsed_time(start_time.get(), end_time.get())}\n")
+            T.insert("end", "Start Time: ", "bold")
+            T.insert("end", f"{year1_str.get()}-{month1_str.get()}-{day1_str.get()} {start_time.get()} (GMT+8)\n")
+            T.insert("end", "End Time: ", "bold")
+            T.insert("end", f"{resolved_checker()}\n")
+            T.insert("end", "Service Degradation: ", "bold")
+            T.insert("end", f"{service_degradation_variable.get()}\n")
+            T.insert("end", "Symptoms: ", "bold")
+            T.insert("end", f"{symptoms.get('1.0','end-1c')}\n")
+            T.insert("end", "Action Taken: ", "bold")
+            T.insert("end", f"{action_taken.get('1.0', 'end-1c')}\n")
+            T.insert("end", "Root Cause: ", "bold")
+            T.insert("end", f"{root_cause_variable.get()}\n")
+            T.insert("end", "Comms Manager: ", "bold")
+            T.insert("end", f"{comms_manager_variable.get()}\n")
+            T.insert("end", "Crisis Manager: ", "bold")
+            T.insert("end", f"{crisis_manager_variable.get()}\n")
+            T.insert("end", "Escalated by: ", "bold")
+            T.insert("end", f" {escalated_by.get()}\n\n")
+            T.insert("end", "Clik ID: ", "bold")
+            T.insert("end", f"{clik_id.get()}\n")
+            T.insert("end", "Customer Ref#: ", "bold")
+            T.insert("end", f"{customer_ref.get()}\n\n")
+            T.insert("end", "Join Microsoft Teams Chat: ", "bold")
+            T.insert("end", f"{shortener(bitly_url)}")
+
         except NameError:
             T.insert(END, f"There is an error! Please check the minimum required fields for an escalation.")
             pass
@@ -449,5 +486,3 @@ print_button = Button(master, text="Print", command=lambda: print_template())
 print_button.place(y=0, x=350)
 
 mainloop()
-
-# test commit
