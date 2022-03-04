@@ -1,9 +1,10 @@
-from tkinter import Tk, Label, StringVar, OptionMenu, Entry, Text, Scrollbar, RIGHT, Y, Listbox, YES, Button, mainloop,\
-    END, Frame
+from tkinter import Tk, Label, StringVar, OptionMenu, Entry, Text, Scrollbar, RIGHT, Y, Listbox, YES, Button, mainloop, \
+    END, Frame, messagebox
 import bitlyshortener
 from bitlyshortener.exc import RequestError, ArgsError, ShortenerError
 import time
 from datetime import date, datetime
+import klembord
 
 # Main Window
 master = Tk()
@@ -283,11 +284,11 @@ def shortener(url):
         try:
             return str(','.join(shortener.shorten_urls([bitly_url.get()])))
         except RequestError:
-            return str("N/A")
+            return str("Invalid URL")
         except ArgsError:
-            return str("N/A")
+            return str("Invalid URL")
         except ShortenerError:
-            return str("N/A")
+            return str("Invalid URL")
     else:
         return str("N/A")
 
@@ -398,46 +399,48 @@ op_frame.place(x=230, y=230)
 
 def print_template():
     global T
-    try:
-        root = Tk()
-        root.title("High Sev Escalation")
-        T = Text(root, height=25, width=80)
-        l = Label(root, text="Template")
-        l.config(font=("Courier", 14))
-        b2 = Button(root, text="Exit", command=root.destroy)
-        l.pack()
-        T.pack()
-        b2.pack()
-        T.insert(END,
-                 f"Status: {status_variable.get()}\n"
-                 f"Severity: {severity_variable.get()}\n"
-                 f"Name: {name.get()}\n"
-                 f"Affecting System: {', '.join(items)}\n"
-                 f"Tier: {tier_variable.get()}\n"
-                 f"Operator: {', '.join(op_items)}\n"
-                 f"Time Elapsed:{num_of_days(int(year1_str.get()), int(month1_str.get()), int(day1_str.get()), int(year2_str.get()), int(month2_str.get()), int(day2_str.get()))} {elapsed_time(start_time.get(), end_time.get())}\n"
-                 f"Start Time: {year1_str.get()}-{month1_str.get()}-{day1_str.get()} {start_time.get()} (GMT+8)\n"
-                 f"End Time: {resolved_checker()}\n"
-                 f"Service Degradation: {service_degradation_variable.get()}\n"
-                 f"Symptoms: {symptoms.get('1.0', 'end-1c')}\n"
-                 f"Action Taken: {action_taken.get('1.0', 'end-1c')}\n"
-                 f"Root Cause: {root_cause_variable.get()}\n"
-                 f"Comms Manager: {comms_manager_variable.get()}\n"
-                 f"Crisis Manager: {crisis_manager_variable.get()}\n"
-                 f"Escalated by: {escalated_by.get()}\n\n"
-
-                 f"Clik ID: {clik_id.get()}\n"
-                 f"Customer Ref#: {customer_ref.get()}\n\n"
-
-                 f"Join Microsoft Teams Chat: {shortener(bitly_url)}"
-                 )
-    except NameError:
-        T.insert(END, 'There is an error! Please check the minimum required fields for an escalation.')
-        pass
-    except ValueError:
-        T.insert(END, 'There is an error! Please check the minimum required fields for an escalation.')
-        pass
-
+    if shortener(bitly_url) == "Invalid URL":
+        messagebox.showinfo('Error', 'Bitly: Invalid URL')
+    else:
+        try:
+            root = Tk()
+            root.title("High Sev Escalation")
+            T = Text(root, height=25, width=80)
+            l = Label(root, text="Template")
+            l.config(font=("Courier", 14))
+            b2 = Button(root, text="Exit", command=root.destroy)
+            l.pack()
+            T.pack()
+            b2.pack()
+            T.insert(END,
+                     f"Status: {status_variable.get()}\n"
+                     f"Severity: {severity_variable.get()}\n"
+                     f"Name: {name.get()}\n"
+                     f"Affecting System: {', '.join(items)}\n"
+                     f"Tier: {tier_variable.get()}\n"
+                     f"Operator: {', '.join(op_items)}\n"
+                     f"Time Elapsed:{num_of_days(int(year1_str.get()), int(month1_str.get()), int(day1_str.get()), int(year2_str.get()), int(month2_str.get()), int(day2_str.get()))} {elapsed_time(start_time.get(), end_time.get())}\n"
+                     f"Start Time: {year1_str.get()}-{month1_str.get()}-{day1_str.get()} {start_time.get()} (GMT+8)\n"
+                     f"End Time: {resolved_checker()}\n"
+                     f"Service Degradation: {service_degradation_variable.get()}\n"
+                     f"Symptoms: {symptoms.get('1.0', 'end-1c')}\n"
+                     f"Action Taken: {action_taken.get('1.0', 'end-1c')}\n"
+                     f"Root Cause: {root_cause_variable.get()}\n"
+                     f"Comms Manager: {comms_manager_variable.get()}\n"
+                     f"Crisis Manager: {crisis_manager_variable.get()}\n"
+                     f"Escalated by: {escalated_by.get()}\n\n"
+    
+                     f"Clik ID: {clik_id.get()}\n"
+                     f"Customer Ref#: {customer_ref.get()}\n\n"
+    
+                     f"Join Microsoft Teams Chat: {shortener(bitly_url)}"
+                     )
+        except NameError:
+            T.insert(END, f"There is an error! Please check the minimum required fields for an escalation.")
+            pass
+        except ValueError:
+            T.insert(END, 'There is an error! Please check the minimum required fields for an escalation.')
+            pass
 
         mainloop()
 
