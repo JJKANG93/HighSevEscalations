@@ -80,7 +80,7 @@ status_label = Label(master, text="Status").place(x=0, y=0)
 status_variable = StringVar(master)
 status_variable.set(status[0])  # default value
 status_options = OptionMenu(master, status_variable, *status)
-status_options.place(y=20, x=0)
+status_options.place(y=15, x=0)
 
 
 def resolved_checker():
@@ -405,7 +405,7 @@ def print_template():
         try:
             root = Tk()
             root.title("High Sev Escalation")
-            T = Text(root, height=25, width=80)
+            T = Text(root, font=('Ariel 10'), height=25, width=80)
             l = Label(root, text="Template")
             l.config(font=("Courier", 14))
             b2 = Button(root, text="Exit", command=root.destroy)
@@ -415,7 +415,7 @@ def print_template():
             b2.pack()
             clipboard_button.pack(ipadx=20)
 
-            T.tag_configure('bold', font='TkDefaultFont 9 bold')
+            T.tag_configure('bold', font='Ariel 10 bold')
             TAG_TO_HTML = {
                 ('tagon', 'bold'): '<b>',
                 ('tagoff', 'bold'): '</b>',
@@ -460,7 +460,7 @@ def print_template():
                 klembord.set_with_rich_text(txt, ''.join(html_text))
                 return "break"  # prevent class binding to be triggered
 
-            T.insert("end", "Status: ", "bold"),
+            T.insert("end", "Status: ", "bold")
             T.insert("end", f"{status_variable.get()}\n")
             T.insert("end", "Severity: ", "bold")
             T.insert("end", f"{severity_variable.get()}\n")
