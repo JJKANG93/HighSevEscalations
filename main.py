@@ -446,11 +446,13 @@ def print_template():
             root.title("High Sev Escalation")
             T = Text(root, font=('Ariel 10'), height=25, width=80, undo=True)
             l = Label(root, text="Template")
+            note = Label(root, text="Note: Can only copy bold text to an HTML editor.")
             l.config(font=("Courier", 14))
             b2 = Button(root, text="Exit", command=root.destroy)
             clipboard_button = Button(root, text="Copy Text", command=lambda: copy())
             l.pack()
             T.pack()
+            note.pack()
             clipboard_button.pack(ipadx=20)
             b2.pack()
 
