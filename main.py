@@ -1,5 +1,5 @@
 from tkinter import Tk, Label, StringVar, OptionMenu, Entry, Text, Scrollbar, RIGHT, Y, Listbox, YES, Button, mainloop, \
-    END, Frame, messagebox, TclError
+    END, Frame, messagebox, TclError, WORD
 import bitlyshortener
 from bitlyshortener.exc import RequestError, ArgsError, ShortenerError
 import time
@@ -249,13 +249,13 @@ service_degradation_options.place(y=420, x=0)
 
 # Symptoms
 symptoms_label = Label(master, text="Symptoms", font=("Ariel", 10, "bold")).place(x=0, y=450)
-symptoms = Text(master, undo=True)
+symptoms = Text(master, undo=True, wrap=WORD)
 symptoms.insert("3.0", "GPM degradation by XX% affecting <xxx>")
 symptoms.place(x=0, y=470, height=100, width=390)
 
 # Action Taken
 action_taken_label = Label(master, text="Action Taken", font=("Ariel", 10, "bold")).place(x=550, y=20)
-action_taken = Text(master, undo=True)
+action_taken = Text(master, undo=True, wrap=WORD)
 action_taken.insert("3.0", "Internal testing showed no errors on our system. "
                            "ITOC is contacting relevant teams. "
                            "ITOC is checking with the operator.")
