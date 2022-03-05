@@ -428,7 +428,7 @@ def print_template():
                                                       f'<br><b>Affecting System: </b>{", ".join(items)}'
                                                       f'<br><b>Tier: </b>{tier_variable.get()}'
                                                       f'<br><b>Operator: </b>{", ".join(op_items)}'
-                                                      f'<br><b>Time Elapsed: </b>{num_of_days(int(year1_str.get()), int(month1_str.get()), int(day1_str.get()), int(year2_str.get()), int(month2_str.get()), int(day2_str.get()))} {elapsed_time(start_time.get(), end_time.get())}'
+                                                      f'<br><b>Time Elapsed:</b> {num_of_days(int(year1_str.get()), int(month1_str.get()), int(day1_str.get()), int(year2_str.get()), int(month2_str.get()), int(day2_str.get()))} {elapsed_time(start_time.get(), end_time.get())}'
                                                       f'<br><b>Start Time: </b>{year1_str.get()}-{month1_str.get()}-{day1_str.get()} {start_time.get()} (GMT+8)'
                                                       f'<br><b>End Time: </b>{resolved_checker()}'
                                                       f'<br><b>Service Degradation: </b>{service_degradation_variable.get()}'
