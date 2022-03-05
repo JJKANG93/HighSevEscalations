@@ -399,6 +399,7 @@ op_frame.place(x=230, y=230)
 
 def print_template():
     global T
+    klembord.set_text('Nothing to copy!')
     if shortener(bitly_url) == "Invalid URL":
         messagebox.showinfo('Error', 'Bitly: Invalid URL')
     else:
@@ -412,8 +413,8 @@ def print_template():
             clipboard_button = Button(root, text="Copy Text", command=lambda: copy())
             l.pack()
             T.pack()
-            b2.pack()
             clipboard_button.pack(ipadx=20)
+            b2.pack()
 
             T.tag_configure('bold', font='Ariel 10 bold')
             TAG_TO_HTML = {
@@ -422,27 +423,27 @@ def print_template():
                         }
 
             def copy():
-                klembord.set_with_rich_text('Status', f'<b>Status: </b>{status_variable.get()}'
-                                                      f'<br><b>Severity: </b>{severity_variable.get()}'
-                                                      f'<br><b>Name: </b>{name.get()}'
-                                                      f'<br><b>Affecting System: </b>{", ".join(items)}'
-                                                      f'<br><b>Tier: </b>{tier_variable.get()}'
-                                                      f'<br><b>Operator: </b>{", ".join(op_items)}'
-                                                      f'<br><b>Time Elapsed:</b> {num_of_days(int(year1_str.get()), int(month1_str.get()), int(day1_str.get()), int(year2_str.get()), int(month2_str.get()), int(day2_str.get()))} {elapsed_time(start_time.get(), end_time.get())}'
-                                                      f'<br><b>Start Time: </b>{year1_str.get()}-{month1_str.get()}-{day1_str.get()} {start_time.get()} (GMT+8)'
-                                                      f'<br><b>End Time: </b>{resolved_checker()}'
-                                                      f'<br><b>Service Degradation: </b>{service_degradation_variable.get()}'
-                                                      f'<br><b>Symptoms: </b>{symptoms.get("1.0", "end-1c")}'
-                                                      f'<br><b>Action Taken: </b>{action_taken.get("1.0", "end-1c")}'
-                                                      f'<br><b>Root Cause: </b>{root_cause_variable.get()}'
-                                                      f'<br><b>Comms Manager: </b>{comms_manager_variable.get()}'
-                                                      f'<br><b>Crisis Manager: </b>{crisis_manager_variable.get()}'
-                                                      f'<br><b>Escalated by: </b>{escalated_by.get()}'
-                                                      f'<br>'
-                                                      f'<br><b>Clik ID: </b>{clik_id.get()}'
-                                                      f'<br><b>Customer Ref#: </b>{customer_ref.get()}'
-                                                      f'<br>'
-                                                      f'<br><b>Join Microsoft Teams Chat: </b>{shortener(bitly_url)}')
+                    klembord.set_with_rich_text('Status', f'<b>Status: </b>{status_variable.get()}'
+                                                          f'<br><b>Severity: </b>{severity_variable.get()}'
+                                                          f'<br><b>Name: </b>{name.get()}'
+                                                          f'<br><b>Affecting System: </b>{", ".join(items)}'
+                                                          f'<br><b>Tier: </b>{tier_variable.get()}'
+                                                          f'<br><b>Operator: </b>{", ".join(op_items)}'
+                                                          f'<br><b>Time Elapsed:</b> {num_of_days(int(year1_str.get()), int(month1_str.get()), int(day1_str.get()), int(year2_str.get()), int(month2_str.get()), int(day2_str.get()))} {elapsed_time(start_time.get(), end_time.get())}'
+                                                          f'<br><b>Start Time: </b>{year1_str.get()}-{month1_str.get()}-{day1_str.get()} {start_time.get()} (GMT+8)'
+                                                          f'<br><b>End Time: </b>{resolved_checker()}'
+                                                          f'<br><b>Service Degradation: </b>{service_degradation_variable.get()}'
+                                                          f'<br><b>Symptoms: </b>{symptoms.get("1.0", "end-1c")}'
+                                                          f'<br><b>Action Taken: </b>{action_taken.get("1.0", "end-1c")}'
+                                                          f'<br><b>Root Cause: </b>{root_cause_variable.get()}'
+                                                          f'<br><b>Comms Manager: </b>{comms_manager_variable.get()}'
+                                                          f'<br><b>Crisis Manager: </b>{crisis_manager_variable.get()}'
+                                                          f'<br><b>Escalated by: </b>{escalated_by.get()}'
+                                                          f'<br>'
+                                                          f'<br><b>Clik ID: </b>{clik_id.get()}'
+                                                          f'<br><b>Customer Ref#: </b>{customer_ref.get()}'
+                                                          f'<br>'
+                                                          f'<br><b>Join Microsoft Teams Chat: </b>{shortener(bitly_url)}')
 
             def copy_rich_text(event):
                 try:
@@ -500,10 +501,10 @@ def print_template():
             T.insert("end", f"{shortener(bitly_url)}")
 
         except NameError:
-            T.insert(END, f"There is an error! Please check the minimum required fields for an escalation.")
+            T.insert(END, f"There is an error! \nPlease check the minimum required fields for an escalation.")
             pass
         except ValueError:
-            T.insert(END, 'There is an error! Please check the minimum required fields for an escalation.')
+            T.insert(END, 'There is an error! \nPlease check the minimum required fields for an escalation.')
             pass
 
         mainloop()
