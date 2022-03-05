@@ -15,7 +15,7 @@ screen_height = master.winfo_screenheight()
 x = (screen_width / 2) - (app_width / 2)
 y = (screen_height / 2) - (app_height / 2)
 master.geometry(f'{app_width}x{app_height}+{int(x)}+{int(y)}')  # main window start in the center of the screen
-master.title('High Sev Escalation App --Version 3.5')
+master.title('High Sev Escalation App --Version 4.0')
 
 status = ["New",
           "New/Resolved",
@@ -34,14 +34,51 @@ affecting_system = ["all", "Live Dealer", "TNGQuickfire", "MGP SW", "QF2", "Semp
 
 tier = ["N/A", "Tier_1", "Tier_2"]
 
-operator = ["all", "TEG1", "GT", "TEG2", "BBIN_CNY", "TEG3", "JuGaming(A)",
-            "TEG4", "JuGamingA(6)", "JuGamingA(12)", "JuGamingA(18)", "JuGamingA(25)",
-            "JuGamingA(28)", "TEG6", "Oriental_Game", "OG", "TEG0", "Power_Asia", "infini88",
-            "Asia888", "ambtw", "topusd3", "TOP_USD2",
-            "Poseidon", "TH1GAMES", "TOP_USD(GAMA)", "UEG", "inplaymatrix", "GplayG", "MGP SW", "AMBSW",
-            "AMBGAMESSW", "pay4dsw",
-            "Sempris", "W88", "Wild_Treasure", "188bet", "Asiabet", "Solid_Gaming", "GSD", "Foxnos", "M88",
-            "Asian_Logic", "VWIN", "SBO"]
+operator = ["all",
+            "-------------------------TEG0----------------------",
+            "Power_Asia",
+            "infini88",
+            "Asia888",
+            "ambtw",
+            "topusd3",
+            "TOP_USD2",
+            "Poseidon",
+            "TH1GAMES",
+            "TOP_USD(GAMA)",
+            "UEG", "inplaymatrix",
+            "GplayG",
+            "-------------------------TEG1----------------------",
+            "GT",
+            "-------------------------TEG2----------------------",
+            "BBIN_CNY",
+            "-------------------------TEG3----------------------",
+            "JuGaming(A)",
+            "-------------------------TEG4----------------------",
+            "JuGamingA(6)",
+            "JuGamingA(12)",
+            "JuGamingA(18)",
+            "JuGamingA(25)",
+            "JuGamingA(28)",
+            "-------------------------TEG6----------------------",
+            "Oriental_Game", "OG",
+            "-------------------------MGP SW--------------------",
+            "AMBSW",
+            "AMBGAMESSW",
+            "pay4dsw",
+            "-------------------------QF1-----------------------",
+            "Sempris",
+            "W88",
+            "Wild_Treasure",
+            "188bet",
+            "Asiabet",
+            "Solid_Gaming",
+            "GSD",
+            "Foxnos",
+            "M88",
+            "Asian_Logic",
+            "VWIN",
+            "-------------------------QF2-----------------------",
+            "SBO"]
 
 service_degradation = ["N/A", "25%", "Over 25%", "50%", "Over 50%", "75%", "Over 75%", "100%"]
 
@@ -323,6 +360,7 @@ def select_affecting_system():
     listbox.bind("<<ListboxSelect>>", listbox_used)
     listbox.pack(padx=10, pady=10, expand=YES, fill="both")
 
+
     def select():
         global af_label
         af_label = Label(af_frame, text=(', '.join(items)), wraplength=240,
@@ -348,7 +386,7 @@ af_frame.place(x=150, y=150)
 # Select operators from a listbox
 def select_operators():
     splash_window = Tk()
-    splash_window.title("Select Affecting System")
+    splash_window.title("Select Operators")
     screen_width = splash_window.winfo_screenwidth()
     screen_height = splash_window.winfo_screenheight()
     login_width = 300
@@ -378,7 +416,7 @@ def select_operators():
 
     def select():
         global op_label
-        op_label = Label(op_frame, text=(', '.join(op_items)), wraplength=120, justify="left")
+        op_label = Label(op_frame, text=(', '.join(op_items)), wraplength=120)
         op_label.pack()
         splash_window.destroy()
 
@@ -393,8 +431,8 @@ operator_button = Button(master, text="Operators:", command=lambda: select_opera
 operator_button.place(y=230, x=0)
 
 # Operator Frame
-op_frame = Frame(master, width=170, height=80)
-op_frame.place(x=230, y=230)
+op_frame = Frame(master)
+op_frame.place(x=200, y=230)
 
 
 def print_template():
