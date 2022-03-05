@@ -15,7 +15,7 @@ screen_height = master.winfo_screenheight()
 x = (screen_width / 2) - (app_width / 2)
 y = (screen_height / 2) - (app_height / 2)
 master.geometry(f'{app_width}x{app_height}+{int(x)}+{int(y)}')  # main window start in the center of the screen
-master.title('High Sev Escalation App --Version 4.0')
+master.title('High Severity Escalation App --Version 4.0')
 
 status = ["New",
           "New/Resolved",
@@ -302,7 +302,7 @@ customer_ref.set("N/A")
 customer_ref_entry_box = Entry(master, textvariable=customer_ref, width=50).place(x=400, y=460, height=25)
 
 # Teams Chat/Bitly shorten to list
-teams_chat_label = Label(master, text='Shorten to Bitly URL (Needs "https://"): \n'
+teams_chat_label = Label(master, text='Shorten to Bitly URL (needs "https://"): \n'
                                       'Join Microsoft Teams Chat', justify="left").place(x=400, y=505, anchor="w")
 bitly_url = StringVar()
 bitly_url.set("N/A")
