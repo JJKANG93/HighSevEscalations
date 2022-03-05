@@ -153,13 +153,13 @@ tier_options.place(y=193, x=0)
 start_time_label = Label(master, text="Date & Start Time (GMT+8):").place(x=0, y=305)
 start_time = StringVar()
 start_time.set("10:30")
-start_time_entry_box = Entry(master, textvariable=start_time, width=0).place(x=100, y=325, height=25)
+start_time_entry_box = Entry(master, textvariable=start_time, width=5).place(x=100, y=325, height=25)
 
 # End Time
 end_time_label = Label(master, text="Date & Now/End Time (GMT+8):").place(x=0, y=355)
 end_time = StringVar()
 end_time.set("11:30")
-end_time_entry_box = Entry(master, textvariable=end_time, width=0).place(x=100, y=375, height=25)
+end_time_entry_box = Entry(master, textvariable=end_time, width=5).place(x=100, y=375, height=25)
 
 
 # Time Elapsed for Hours and Minutes
@@ -186,32 +186,32 @@ def elapsed_time(start, end):
 # Time Elapsed for Days and Dates
 year1_str = StringVar()
 year1_str.set(2022)
-year1 = Entry(master, textvariable=year1_str, width=0).place(x=0, y=325, height=25)
+year1 = Entry(master, textvariable=year1_str, width=5).place(x=0, y=325, height=25)
 year1_int = year1
 
 month1_str = StringVar()
 month1_str.set("MM")
-month1 = Entry(master, textvariable=month1_str, width=0).place(x=40, y=325, height=25)
+month1 = Entry(master, textvariable=month1_str, width=4).place(x=40, y=325, height=25)
 month1_int = month1
 
 day1_str = StringVar()
 day1_str.set("DD")
-day1 = Entry(master, textvariable=day1_str, width=0).place(x=70, y=325, height=25)
+day1 = Entry(master, textvariable=day1_str, width=3).place(x=70, y=325, height=25)
 day1_int = day1
 
 year2_str = StringVar()
 year2_str.set(2022)
-year2 = Entry(master, textvariable=year2_str, width=0).place(x=0, y=375, height=25)
+year2 = Entry(master, textvariable=year2_str, width=5).place(x=0, y=375, height=25)
 year_int = year2
 
 month2_str = StringVar()
 month2_str.set("MM")
-month2 = Entry(master, textvariable=month2_str, width=0).place(x=40, y=375, height=25)
+month2 = Entry(master, textvariable=month2_str, width=4).place(x=40, y=375, height=25)
 month2_int = month2
 
 day2_str = StringVar()
 day2_str.set("DD")
-day2 = Entry(master, textvariable=day2_str, width=0).place(x=70, y=375, height=25)
+day2 = Entry(master, textvariable=day2_str, width=3).place(x=70, y=375, height=25)
 day2_int = day2
 
 
@@ -249,13 +249,13 @@ service_degradation_options.place(y=420, x=0)
 
 # Symptoms
 symptoms_label = Label(master, text="Symptoms").place(x=0, y=450)
-symptoms = Text(master)
+symptoms = Text(master, undo=True)
 symptoms.insert("3.0", "GPM degradation by XX% affecting <xxx>")
 symptoms.place(x=0, y=470, height=100, width=390)
 
 # Action Taken
 action_taken_label = Label(master, text="Action Taken").place(x=550, y=20)
-action_taken = Text(master)
+action_taken = Text(master, undo=True)
 action_taken.insert("3.0", "Internal testing showed no errors on our system. "
                            "ITOC is contacting relevant teams. "
                            "ITOC is checking with the operator.")
@@ -444,7 +444,7 @@ def print_template():
         try:
             root = Tk()
             root.title("High Sev Escalation")
-            T = Text(root, font=('Ariel 10'), height=25, width=80)
+            T = Text(root, font=('Ariel 10'), height=25, width=80, undo=True)
             l = Label(root, text="Template")
             l.config(font=("Courier", 14))
             b2 = Button(root, text="Exit", command=root.destroy)
@@ -539,10 +539,10 @@ def print_template():
             T.insert("end", f"{shortener(bitly_url)}")
 
         except NameError:
-            T.insert(END, "\n\nThere is an error! Please check the minimum required fields for an escalation. \n 發生錯誤! 請確認各欄位.")
+            T.insert(END, "\n\n\t\t\t\tThere was an error! \n\t\tPlease check the minimum required fields for an escalation. \n \t\t\t        發生錯誤! 請確認各欄位.")
             pass
         except ValueError:
-            T.insert(END, '\n\nThere is an error! Please check the minimum required fields for an escalation. \n 發生錯誤! 請確認各欄位.')
+            T.insert(END, "\n\n\t\t\t\tThere was an error! \n\t\tPlease check the minimum required fields for an escalation. \n \t\t\t        發生錯誤! 請確認各欄位.")
             pass
 
         mainloop()
