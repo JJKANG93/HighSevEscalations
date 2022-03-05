@@ -302,7 +302,7 @@ customer_ref.set("N/A")
 customer_ref_entry_box = Entry(master, textvariable=customer_ref, width=50).place(x=400, y=460, height=25)
 
 # Teams Chat/Bitly shorten to list
-teams_chat_label = Label(master, text='Shorten to Bitly URL (Needs "https://"): \n '
+teams_chat_label = Label(master, text='Shorten to Bitly URL (Needs "https://"): \n'
                                       'Join Microsoft Teams Chat', justify="left").place(x=400, y=505, anchor="w")
 bitly_url = StringVar()
 bitly_url.set("N/A")
@@ -439,7 +439,7 @@ def print_template():
     global T
     klembord.set_text('Nothing to copy!')
     if shortener(bitly_url) == "Invalid URL":
-        messagebox.showinfo('Error', 'Bitly: Invalid URL')
+        messagebox.showinfo('Bitly Error', 'Invalid URL\n無效URL')
     else:
         try:
             root = Tk()
@@ -539,13 +539,14 @@ def print_template():
             T.insert("end", f"{shortener(bitly_url)}")
 
         except NameError:
-            T.insert(END, f"There is an error! \nPlease check the minimum required fields for an escalation.")
+            T.insert(END, "\n\nThere is an error! Please check the minimum required fields for an escalation. \n 發生錯誤! 請確認各欄位.")
             pass
         except ValueError:
-            T.insert(END, 'There is an error! \nPlease check the minimum required fields for an escalation.')
+            T.insert(END, '\n\nThere is an error! Please check the minimum required fields for an escalation. \n 發生錯誤! 請確認各欄位.')
             pass
 
         mainloop()
+
 
 print_button = Button(master, text="Print", command=lambda: print_template())
 print_button.place(y=0, x=350)
