@@ -15,7 +15,7 @@ screen_height = master.winfo_screenheight()
 x = (screen_width / 2) - (app_width / 2)
 y = (screen_height / 2) - (app_height / 2)
 master.geometry(f'{app_width}x{app_height}+{int(x)}+{int(y)}')  # main window start in the center of the screen
-master.title('High Severity Escalation App --Version 4.0')
+master.title('High Severity Escalation App --Version 4.5')
 
 status = ["New",
           "New/Resolved",
@@ -92,7 +92,7 @@ comms_manager = ["Abri Liebenberg (+61 432823087)",
                  "Jeff Huang (+886 933308768)",
                  "Jill Shen (+886 903438345)",
                  "Frank Hsu (+886 972211756)",
-                 "Juan Gilpin (+886 909948943)"
+                 "Juan Gilpin (+886 909948943)",
                  "Ran Alkalay",
                  "Arik Klein",
                  "Jamil Saab",
