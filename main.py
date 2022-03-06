@@ -197,6 +197,8 @@ def elapsed_time(start, end):
     else:
         pass
 
+sel_date1 = None
+sel_date2 = None
 
 # Calendar1
 def get_date1():
@@ -485,6 +487,8 @@ def print_template():
     klembord.set_text('Nothing to copy!')
     if shortener(bitly_url) == "Invalid URL":
         messagebox.showinfo('Bitly Error', 'Invalid URL\n無效URL')
+    elif sel_date1 == None or sel_date2 == None:
+        messagebox.showinfo('Error', 'Please check the minimum required fields for an escalation.')
     elif num_of_days(sel_date1[0:4], sel_date1[5:7], sel_date1[8:10], sel_date2[0:4], sel_date2[5:7], sel_date2[8:10]) == 'less than zero':
         messagebox.showinfo('Date Error', 'Check the date! \n'
                                       '     確認日期')
