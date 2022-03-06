@@ -1,10 +1,12 @@
 from tkinter import Tk, Label, StringVar, OptionMenu, Entry, Text, Scrollbar, RIGHT, Y, Listbox, YES, Button, mainloop, \
-    END, Frame, messagebox, TclError, WORD
+    END, Frame, messagebox, TclError, WORD, Menu
 import bitlyshortener
 from bitlyshortener.exc import RequestError, ArgsError, ShortenerError
 import time
 from datetime import date, datetime
 import klembord
+from tkcalendar import *
+
 
 # Main Window
 master = Tk()
@@ -15,7 +17,18 @@ screen_height = master.winfo_screenheight()
 x = (screen_width / 2) - (app_width / 2)
 y = (screen_height / 2) - (app_height / 2)
 master.geometry(f'{app_width}x{app_height}+{int(x)}+{int(y)}')  # main window start in the center of the screen
-master.title('High Severity Escalation App --Version 4.5')
+master.title('High Severity Escalation App --Version 4.0')
+
+# File Menu
+def donothing():
+   x = 0
+
+menubar = Menu(master)
+filemenu = Menu(menubar, tearoff=0)
+menu = Menu(menubar, tearoff=0)
+filemenu.add_command(label="New", command=donothing)
+menubar.add_cascade(label="File", menu=filemenu)
+master.config(menu=menubar)
 
 status = ["New",
           "New/Resolved",
@@ -92,7 +105,7 @@ comms_manager = ["Abri Liebenberg (+61 432823087)",
                  "Jeff Huang (+886 933308768)",
                  "Jill Shen (+886 903438345)",
                  "Frank Hsu (+886 972211756)",
-                 "Juan Gilpin (+886 909948943)",
+                 "Juan Gilpin (+886 909948943)"
                  "Ran Alkalay",
                  "Arik Klein",
                  "Jamil Saab",
@@ -123,7 +136,7 @@ status_options.place(y=16, x=0)
 def resolved_checker():
     if status_variable.get() == "Resolved" or status_variable.get() == "New/Resolved" or \
             status_variable.get() == "Re-occurring/Resolved":
-        return str(year2_str.get()) + "-" + str(month2_str.get()) + "-" + str(day2_str.get()) + " " + \
+        return str(sel_date2[0:4]) + "-" + str(sel_date2[5:7]) + "-" + str(sel_date2[8:10]) + " " + \
                str(end_time.get()) + " " + "(GMT+8)"
     else:
         return "N/A"
@@ -150,16 +163,16 @@ tier_options = OptionMenu(master, tier_variable, *tier)
 tier_options.place(y=193, x=0)
 
 # Start Time
-start_time_label = Label(master, text="Date & Start Time (GMT+8):", font=("Ariel", 10, "bold")).place(x=0, y=305)
+start_time_label = Label(master, text="Start Time (GMT+8):", font=("Ariel", 10, "bold")).place(x=60, y=305)
 start_time = StringVar()
-start_time.set("10:30")
-start_time_entry_box = Entry(master, textvariable=start_time, width=5).place(x=100, y=325, height=25)
+start_time.set("00:00")
+start_time_entry_box = Entry(master, textvariable=start_time, width=5).place(x=65, y=325, height=25)
 
 # End Time
-end_time_label = Label(master, text="Date & Now/End Time (GMT+8):", font=("Ariel", 10, "bold")).place(x=0, y=355)
+end_time_label = Label(master, text="Now/End Time (GMT+8):", font=("Ariel", 10, "bold")).place(x=60, y=355)
 end_time = StringVar()
-end_time.set("11:30")
-end_time_entry_box = Entry(master, textvariable=end_time, width=5).place(x=100, y=375, height=25)
+end_time.set("00:00")
+end_time_entry_box = Entry(master, textvariable=end_time, width=5).place(x=65, y=375, height=25)
 
 
 # Time Elapsed for Hours and Minutes
@@ -182,48 +195,78 @@ def elapsed_time(start, end):
     else:
         pass
 
+# Calendar1
+def get_date1():
+    global sel_date1
+    splash_window = Tk()
+    splash_window.title("Select Start Date")
+    screen_width = splash_window.winfo_screenwidth()
+    screen_height = splash_window.winfo_screenheight()
+    login_width = 300
+    login_height = 300
+    x = (screen_width / 2) - (login_width / 2)
+    y = (screen_height / 2) - (login_height / 2)
+    splash_window.geometry(f'{login_width}x{login_height}+{int(x)}+{int(y)}')
+    cal = Calendar(splash_window, selectmode="day", date_pattern="yyyy mm dd")
+    cal.pack(pady=20)
+    select_button1 = Button(splash_window, text="Select", command=lambda: select_date1()).pack()
 
-# Time Elapsed for Days and Dates
-year1_str = StringVar()
-year1_str.set(2022)
-year1 = Entry(master, textvariable=year1_str, width=5).place(x=0, y=325, height=25)
-year1_int = year1
-
-month1_str = StringVar()
-month1_str.set("MM")
-month1 = Entry(master, textvariable=month1_str, width=4).place(x=40, y=325, height=25)
-month1_int = month1
-
-day1_str = StringVar()
-day1_str.set("DD")
-day1 = Entry(master, textvariable=day1_str, width=3).place(x=70, y=325, height=25)
-day1_int = day1
-
-year2_str = StringVar()
-year2_str.set(2022)
-year2 = Entry(master, textvariable=year2_str, width=5).place(x=0, y=375, height=25)
-year_int = year2
-
-month2_str = StringVar()
-month2_str.set("MM")
-month2 = Entry(master, textvariable=month2_str, width=4).place(x=40, y=375, height=25)
-month2_int = month2
-
-day2_str = StringVar()
-day2_str.set("DD")
-day2 = Entry(master, textvariable=day2_str, width=3).place(x=70, y=375, height=25)
-day2_int = day2
+    # Select Date Within Calendar
+    def select_date1():
+        global sel_date1
+        cal_label1.config(text=cal.get_date())
+        sel_date1 = cal.get_date()
+        splash_window.destroy()
+        return sel_date1
 
 
-# Day difference calculator
+button = Button(master, text="Start Date", command= lambda:get_date1())
+button.place(x=0, y=305)
+
+cal_label1 = Label(master, text="")
+cal_label1.place(x=0, y=330)
+
+
+# Calendar2
+def get_date2():
+    global sel_date2
+    splash_window = Tk()
+    splash_window.title("Select End Date")
+    screen_width = splash_window.winfo_screenwidth()
+    screen_height = splash_window.winfo_screenheight()
+    login_width = 300
+    login_height = 300
+    x = (screen_width / 2) - (login_width / 2)
+    y = (screen_height / 2) - (login_height / 2)
+    splash_window.geometry(f'{login_width}x{login_height}+{int(x)}+{int(y)}')
+    cal = Calendar(splash_window, selectmode="day", date_pattern="yyyy-mm-dd")
+    cal.pack(pady=20)
+    select_button2 = Button(splash_window, text="Select", command=lambda: select_date2()).pack()
+
+    # Select Date Within Calendar
+    def select_date2():
+        global sel_date2
+        cal_label2.config(text=cal.get_date())
+        sel_date2 = cal.get_date()
+        splash_window.destroy()
+        return sel_date2
+
+# Day Difference Calculator
 def num_of_days(year1, month1, day1, year2, month2, day2):
-    date1 = date(year1, month1, day1)
-    date2 = date(year2, month2, day2)
+    date1 = date(int(str(year1)), int(str(month1)), int(str(day1)))
+    date2 = date(int(str(year2)), int(str(month2)), int(str(day2)))
     date_diff = (date2 - date1).days
     if date_diff > 0:
         return str(date_diff) + "d"
     else:
         return str("")
+
+
+button = Button(master, text="End Date", command= lambda:get_date2())
+button.place(x=0, y=350)
+
+cal_label2 = Label(master, text="")
+cal_label2.place(x=0, y=375)
 
 
 # Show Current Time
@@ -363,8 +406,7 @@ def select_affecting_system():
 
     def select():
         global af_label
-        af_label = Label(af_frame, text=(', '.join(items)), wraplength=240,
-                         justify="center")  # Displays current selection
+        af_label = Label(af_frame, text=(', '.join(items)), wraplength=240, justify="center")  # Displays current selection
         af_label.pack()
         splash_window.destroy()
 
@@ -469,8 +511,8 @@ def print_template():
                                                           f'<br><b>Affecting System: </b>{", ".join(items)}'
                                                           f'<br><b>Tier: </b>{tier_variable.get()}'
                                                           f'<br><b>Operator: </b>{", ".join(op_items)}'
-                                                          f'<br><b>Time Elapsed:</b> {num_of_days(int(year1_str.get()), int(month1_str.get()), int(day1_str.get()), int(year2_str.get()), int(month2_str.get()), int(day2_str.get()))} {elapsed_time(start_time.get(), end_time.get())}'
-                                                          f'<br><b>Start Time: </b>{year1_str.get()}-{month1_str.get()}-{day1_str.get()} {start_time.get()} (GMT+8)'
+                                                          f'<br><b>Time Elapsed:</b> {num_of_days(sel_date1[0:4], sel_date1[5:7], sel_date1[8:10], sel_date2[0:4], sel_date2[5:7], sel_date2[8:10])} {elapsed_time(start_time.get(), end_time.get())}'
+                                                          f'<br><b>Start Time: </b>{sel_date1[0:4]}-{sel_date1[5:7]}-{sel_date1[8:10]} {start_time.get()} (GMT+8)'
                                                           f'<br><b>End Time: </b>{resolved_checker()}'
                                                           f'<br><b>Service Degradation: </b>{service_degradation_variable.get()}'
                                                           f'<br><b>Symptoms: </b>{symptoms.get("1.0", "end-1c")}'
@@ -514,9 +556,9 @@ def print_template():
             T.insert("end", "Operator: ", "bold")
             T.insert("end", f"{', '.join(op_items)}\n")
             T.insert("end", "Time Elapsed: ", "bold")
-            T.insert("end", f"{num_of_days(int(year1_str.get()), int(month1_str.get()), int(day1_str.get()), int(year2_str.get()), int(month2_str.get()), int(day2_str.get()))} {elapsed_time(start_time.get(), end_time.get())}\n")
+            T.insert("end", f"{num_of_days(sel_date1[0:4], sel_date1[5:7], sel_date1[8:10], sel_date2[0:4], sel_date2[5:7], sel_date2[8:10])} {elapsed_time(start_time.get(), end_time.get())}\n")
             T.insert("end", "Start Time: ", "bold")
-            T.insert("end", f"{year1_str.get()}-{month1_str.get()}-{day1_str.get()} {start_time.get()} (GMT+8)\n")
+            T.insert("end", f"{sel_date1[0:4]}-{sel_date1[5:7]}-{sel_date1[8:10]} {start_time.get()} (GMT+8)\n")
             T.insert("end", "End Time: ", "bold")
             T.insert("end", f"{resolved_checker()}\n")
             T.insert("end", "Service Degradation: ", "bold")
