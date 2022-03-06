@@ -261,6 +261,8 @@ def num_of_days(year1, month1, day1, year2, month2, day2):
         return str(date_diff) + "d"
     elif date_diff < 0:
         return str('less than zero')
+    elif date1 == date2:
+        return str('same date')
     else:
         return str("")
 
@@ -487,6 +489,9 @@ def print_template():
         messagebox.showinfo('Bitly Error', 'Invalid URL\n無效URL')
     elif num_of_days(sel_date1[0:4], sel_date1[5:7], sel_date1[8:10], sel_date2[0:4], sel_date2[5:7], sel_date2[8:10]) == 'less than zero':
         messagebox.showinfo('Date Error', 'Check the date! \n'
+                                      '     確認日期')
+    elif num_of_days(sel_date1[0:4], sel_date1[5:7], sel_date1[8:10], sel_date2[0:4], sel_date2[5:7], sel_date2[8:10]) == 'same date':
+        messagebox.showinfo('Date Error','Check the date! \n'
                                       '     確認日期')
     else:
         try:
