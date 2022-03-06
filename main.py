@@ -184,7 +184,9 @@ def elapsed_time(start, end):
 
     hours = int(diff.seconds // (60 * 60))
     mins = int((diff.seconds // 60) % 60)
-    if hours > 0 and mins > 0:
+    if hours == 0 and mins == 0:
+        return str('')
+    elif hours > 0 and mins > 0:
         return str(hours) + "h " + (str(mins) + "m")
     elif hours > 0:
         return str(hours) + "h"
@@ -195,9 +197,9 @@ def elapsed_time(start, end):
     else:
         pass
 
+
 # Calendar1
 def get_date1():
-    global sel_date1
     splash_window = Tk()
     splash_window.title("Select Start Date")
     screen_width = splash_window.winfo_screenwidth()
@@ -229,7 +231,6 @@ cal_label1.place(x=0, y=330)
 
 # Calendar2
 def get_date2():
-    global sel_date2
     splash_window = Tk()
     splash_window.title("Select End Date")
     screen_width = splash_window.winfo_screenwidth()
@@ -264,7 +265,7 @@ def num_of_days(year1, month1, day1, year2, month2, day2):
         return str("")
 
 
-button = Button(master, text="End Date", command= lambda:get_date2())
+button = Button(master, text="End Date", command=lambda: get_date2())
 button.place(x=0, y=350)
 
 cal_label2 = Label(master, text="")
