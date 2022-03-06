@@ -5,7 +5,7 @@ from bitlyshortener.exc import RequestError, ArgsError, ShortenerError
 import time
 from datetime import date, datetime
 import klembord
-from tkcalendar import *
+from tkcalendar import Calendar 
 
 
 # Main Window
