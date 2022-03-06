@@ -1,11 +1,11 @@
-from tkinter import Tk, Label, StringVar, OptionMenu, Entry, Text, Scrollbar, RIGHT, Y, Listbox, YES, Button, mainloop, \
-    END, Frame, messagebox, TclError, WORD, Menu
+from tkinter import Tk, Label, StringVar, OptionMenu, Entry, Text, Scrollbar, RIGHT, Y, Listbox, YES, Button,\
+    mainloop, END, Frame, messagebox, TclError, WORD, Menu
+from tkcalendar import Calendar
 import bitlyshortener
 from bitlyshortener.exc import RequestError, ArgsError, ShortenerError
 import time
 from datetime import date, datetime
 import klembord
-from tkcalendar import Calendar
 
 # Main Window
 master = Tk()
@@ -586,8 +586,15 @@ def print_template():
                                                       f'<br><b>Affecting System: </b>{", ".join(items)}'
                                                       f'<br><b>Tier: </b>{tier_variable.get()}'
                                                       f'<br><b>Operator: </b>{", ".join(op_items)}'
-                                                      f'<br><b>Time Elapsed:</b> {num_of_days(sel_date1[0:4], sel_date1[5:7], sel_date1[8:10], sel_date2[0:4], sel_date2[5:7], sel_date2[8:10])} {elapsed_time(start_time.get(), end_time.get())}'
-                                                      f'<br><b>Start Time: </b>{sel_date1[0:4]}-{sel_date1[5:7]}-{sel_date1[8:10]} {start_time.get()} (GMT+8)'
+                                                      f"""<br><b>Time Elapsed:</b> {num_of_days(sel_date1[0:4],
+                                                                                                sel_date1[5:7],
+                                                                                                sel_date1[8:10],
+                                                                                                sel_date2[0:4],
+                                                                                                sel_date2[5:7],
+                                                                                                sel_date2[8:10])}
+                                                                    {elapsed_time(start_time.get(), end_time.get())}"""
+                                                      f'<br><b>Start Time: </b>{sel_date1[0:4]}-{sel_date1[5:7]}-'
+                                                      f'{sel_date1[8:10]} {start_time.get()} (GMT+8)'
                                                       f'<br><b>End Time: </b>{resolved_checker()}'
                                                       f'<br><b>Service Degradation: </b>{service_degradation_variable.get()}'
                                                       f'<br><b>Symptoms: </b>{symptoms.get("1.0", "end-1c")}'
@@ -632,7 +639,8 @@ def print_template():
             T.insert("end", f"{', '.join(op_items)}\n")
             T.insert("end", "Time Elapsed:", "bold")
             T.insert("end",
-                     f"{num_of_days(sel_date1[0:4], sel_date1[5:7], sel_date1[8:10], sel_date2[0:4], sel_date2[5:7], sel_date2[8:10])} {elapsed_time(start_time.get(), end_time.get())}\n")
+                     f"""{num_of_days(sel_date1[0:4], sel_date1[5:7], sel_date1[8:10], sel_date2[0:4], sel_date2[5:7],
+            sel_date2[8:10])} {elapsed_time(start_time.get(), end_time.get())}\n""")
             T.insert("end", "Start Time: ", "bold")
             T.insert("end", f"{sel_date1[0:4]}-{sel_date1[5:7]}-{sel_date1[8:10]} {start_time.get()} (GMT+8)\n")
             T.insert("end", "End Time: ", "bold")
