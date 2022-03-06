@@ -17,16 +17,36 @@ screen_height = master.winfo_screenheight()
 x = (screen_width / 2) - (app_width / 2)
 y = (screen_height / 2) - (app_height / 2)
 master.geometry(f'{app_width}x{app_height}+{int(x)}+{int(y)}')  # main window start in the center of the screen
-master.title('High Severity Escalation App --Version 4.0')
+master.title('High Severity Escalation App --Version 5.0')
 
 # File Menu
-def donothing():
-   x = 0
+def help():
+    splash_window = Tk()
+    splash_window.title("Help")
+    screen_width = splash_window.winfo_screenwidth()
+    screen_height = splash_window.winfo_screenheight()
+    login_width = 300
+    login_height = 300
+    x = (screen_width / 2) - (login_width / 2)
+    y = (screen_height / 2) - (login_height / 2)
+    splash_window.geometry(f'{login_width}x{login_height}+{int(x)}+{int(y)}')
+
+    yscrollbar = Scrollbar(splash_window)
+    yscrollbar.pack(side=RIGHT, fill=Y)
+    help_box = Text(splash_window, height=25, width=80, undo=True, wrap=WORD)
+    help_box.insert("end", "Help\n\n"
+                           "1. Time Elapsed is automatically calculated. You just need to fill in the 'Now' time.\n\n"
+                           "2. You need to use the Copy button on the print page to copy the bold. You can only copy "
+                           "to HTML editors.\n\n"
+                           "3. Bitly API can only do 100 free URLs a month. You can login to Bitly with our own account."
+                           "4. Only resolved escalations will have End Time printed.")
+    help_box.pack()
+
 
 menubar = Menu(master)
 filemenu = Menu(menubar, tearoff=0)
 menu = Menu(menubar, tearoff=0)
-filemenu.add_command(label="New", command=donothing)
+filemenu.add_command(label="Help", command=help)
 menubar.add_cascade(label="File", menu=filemenu)
 master.config(menu=menubar)
 
@@ -488,7 +508,8 @@ def print_template():
     if shortener(bitly_url) == "Invalid URL":
         messagebox.showinfo('Bitly Error', 'Invalid URL\n無效URL')
     elif sel_date1 == None or sel_date2 == None:
-        messagebox.showinfo('Error', 'Please check the minimum required fields for an escalation.')
+        messagebox.showinfo('Error', 'There was an error! Please check the minimum required fields for an escalation!\n'
+                                     '發生錯誤! 請確認各欄位!')
     elif num_of_days(sel_date1[0:4], sel_date1[5:7], sel_date1[8:10], sel_date2[0:4], sel_date2[5:7], sel_date2[8:10]) == 'less than zero':
         messagebox.showinfo('Date Error', 'Check the date! \n'
                                       '     確認日期')
