@@ -397,7 +397,8 @@ def shortener(url):
     else:
         return str("N/A")
 
-
+# Select Affecting System from listbox
+items = None
 def select_affecting_system():
     splash_window = Tk()
     splash_window.title("Select Affecting System")
@@ -450,7 +451,8 @@ af_frame = Frame(master, width=235, height=80)
 af_frame.place(x=150, y=150)
 
 
-# Select operators from a listbox
+# Select Operators from listbox
+op_items = None
 def select_operators():
     splash_window = Tk()
     splash_window.title("Select Operators")
@@ -508,11 +510,16 @@ def print_template():
     if shortener(bitly_url) == "Invalid URL":
         messagebox.showinfo('Bitly Error', 'Invalid URL\n無效URL')
     elif sel_date1 == None or sel_date2 == None:
-        messagebox.showinfo('Error', 'There was an error! Please check the minimum required fields for an escalation!\n'
-                                     '發生錯誤! 請確認各欄位!')
+        messagebox.showinfo('Error',
+                            'There was an error! Please check the minimum required fields for an escalation!\n'
+                            '發生錯誤! 請確認各欄位!')
     elif num_of_days(sel_date1[0:4], sel_date1[5:7], sel_date1[8:10], sel_date2[0:4], sel_date2[5:7], sel_date2[8:10]) == 'less than zero':
         messagebox.showinfo('Date Error', 'Check the date! \n'
                                       '     確認日期')
+    elif items == None or op_items == None:
+        messagebox.showinfo('Error',
+                            'There was an error! Please check the minimum required fields for an escalation!\n'
+                            '發生錯誤! 請確認各欄位!')
     else:
         try:
             root = Tk()
@@ -613,11 +620,16 @@ def print_template():
             T.insert("end", "Join Microsoft Teams Chat: ", "bold")
             T.insert("end", f"{shortener(bitly_url)}")
 
+        # Backup Errors
         except NameError:
-            T.insert(END, "\n\n\t\t\t\tThere was an error! \n\t\tPlease check the minimum required fields for an escalation. \n \t\t\t        發生錯誤! 請確認各欄位.")
+            T.insert(END, "\n\n\t\t\t\tThere was an error! "
+                          "\n\t\tPlease check the minimum required fields for an escalation."
+                          " \n \t\t\t        發生錯誤! 請確認各欄位.")
             pass
         except ValueError:
-            T.insert(END, "\n\n\t\t\t\tThere was an error! \n\t\tPlease check the minimum required fields for an escalation. \n \t\t\t        發生錯誤! 請確認各欄位.")
+            T.insert(END, "\n\n\t\t\t\tThere was an error!"
+                          " \n\t\tPlease check the minimum required fields for an escalation."
+                          " \n \t\t\t        發生錯誤! 請確認各欄位.")
             pass
 
         mainloop()
