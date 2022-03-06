@@ -5,7 +5,7 @@ from bitlyshortener.exc import RequestError, ArgsError, ShortenerError
 import time
 from datetime import date, datetime
 import klembord
-from tkcalendar import Calendar 
+from tkcalendar import Calendar
 
 
 # Main Window
@@ -258,6 +258,8 @@ def num_of_days(year1, month1, day1, year2, month2, day2):
     date_diff = (date2 - date1).days
     if date_diff > 0:
         return str(date_diff) + "d"
+    elif date_diff < 0:
+        return str('less than zero')
     else:
         return str("")
 
@@ -482,6 +484,9 @@ def print_template():
     klembord.set_text('Nothing to copy!')
     if shortener(bitly_url) == "Invalid URL":
         messagebox.showinfo('Bitly Error', 'Invalid URL\n無效URL')
+    elif num_of_days(sel_date1[0:4], sel_date1[5:7], sel_date1[8:10], sel_date2[0:4], sel_date2[5:7], sel_date2[8:10]) == 'less than zero':
+        messagebox.showinfo('Date Error', 'Check the date! \n'
+                                      '     確認日期')
     else:
         try:
             root = Tk()
