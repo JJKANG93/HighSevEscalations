@@ -209,7 +209,7 @@ def get_date1():
     x = (screen_width / 2) - (login_width / 2)
     y = (screen_height / 2) - (login_height / 2)
     splash_window.geometry(f'{login_width}x{login_height}+{int(x)}+{int(y)}')
-    cal = Calendar(splash_window, selectmode="day", date_pattern="yyyy mm dd")
+    cal = Calendar(splash_window, selectmode="day", date_pattern="yyyy-mm-dd")
     cal.pack(pady=20)
     select_button1 = Button(splash_window, text="Select", command=lambda: select_date1()).pack()
 
@@ -258,11 +258,9 @@ def num_of_days(year1, month1, day1, year2, month2, day2):
     date2 = date(int(str(year2)), int(str(month2)), int(str(day2)))
     date_diff = (date2 - date1).days
     if date_diff > 0:
-        return str(date_diff) + "d"
+        return " " + str(date_diff) + "d"
     elif date_diff < 0:
         return str('less than zero')
-    elif date1 == date2:
-        return str('same date')
     else:
         return str("")
 
@@ -490,9 +488,6 @@ def print_template():
     elif num_of_days(sel_date1[0:4], sel_date1[5:7], sel_date1[8:10], sel_date2[0:4], sel_date2[5:7], sel_date2[8:10]) == 'less than zero':
         messagebox.showinfo('Date Error', 'Check the date! \n'
                                       '     確認日期')
-    elif num_of_days(sel_date1[0:4], sel_date1[5:7], sel_date1[8:10], sel_date2[0:4], sel_date2[5:7], sel_date2[8:10]) == 'same date':
-        messagebox.showinfo('Date Error','Check the date! \n'
-                                      '     確認日期')
     else:
         try:
             root = Tk()
@@ -566,7 +561,7 @@ def print_template():
             T.insert("end", f"{tier_variable.get()}\n")
             T.insert("end", "Operator: ", "bold")
             T.insert("end", f"{', '.join(op_items)}\n")
-            T.insert("end", "Time Elapsed: ", "bold")
+            T.insert("end", "Time Elapsed:", "bold")
             T.insert("end", f"{num_of_days(sel_date1[0:4], sel_date1[5:7], sel_date1[8:10], sel_date2[0:4], sel_date2[5:7], sel_date2[8:10])} {elapsed_time(start_time.get(), end_time.get())}\n")
             T.insert("end", "Start Time: ", "bold")
             T.insert("end", f"{sel_date1[0:4]}-{sel_date1[5:7]}-{sel_date1[8:10]} {start_time.get()} (GMT+8)\n")
