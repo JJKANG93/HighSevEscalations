@@ -3,8 +3,9 @@ from tkinter import Tk, Label, StringVar, OptionMenu, Entry, Text, Scrollbar, RI
 from tkcalendar import Calendar
 import bitlyshortener
 from bitlyshortener.exc import RequestError, ArgsError, ShortenerError
+import re
 import time
-from datetime import date, datetime
+from datetime import datetime
 import klembord
 
 # Main Window
@@ -155,16 +156,6 @@ status_variable.set(status[0])  # default value
 status_options = OptionMenu(master, status_variable, *status)
 status_options.place(y=16, x=0)
 
-
-def resolved_checker():
-    if status_variable.get() == "Resolved" or status_variable.get() == "New/Resolved" or \
-            status_variable.get() == "Re-occurring/Resolved":
-        return str(sel_date2[0:4]) + "-" + str(sel_date2[5:7]) + "-" + str(sel_date2[8:10]) + " " + \
-               str(end_time.get()) + " " + "(GMT+8)"
-    else:
-        return "N/A"
-
-
 # Severity Dropdown Menu
 severity_label = Label(master, text="Severity", font=("Ariel", 10, "bold"))
 severity_label.place(x=0, y=45)
@@ -189,44 +180,74 @@ tier_variable.set(tier[0])  # default value
 tier_options = OptionMenu(master, tier_variable, *tier)
 tier_options.place(y=193, x=0)
 
-# Start Time
+# Start Hour 1
 start_time_label = Label(master, text="Start Time (GMT+8):", font=("Ariel", 10, "bold"))
-start_time_label.place(x=60, y=305)
-start_time = StringVar()
-start_time.set("00:00")
-start_time_entry_box = Entry(master, textvariable=start_time, width=5)
-start_time_entry_box.place(x=65, y=325, height=25)
+start_time_label.place(x=100, y=305)
+start_time1 = StringVar()
+start_time1.set("hh")
+start_time_entry_box1 = Entry(master, textvariable=start_time1, width=3)
+start_time_entry_box1.place(x=105, y=325, height=25)
 
-# End Time
+# Start Hour 2
+start_time2 = StringVar()
+start_time2.set("mm")
+start_time_entry_box2 = Entry(master, textvariable=start_time2, width=3)
+start_time_entry_box2.place(x=135, y=325, height=25)
+
+# End Hour 1
 end_time_label = Label(master, text="Now/End Time (GMT+8):", font=("Ariel", 10, "bold"))
-end_time_label.place(x=60, y=355)
-end_time = StringVar()
-end_time.set("00:00")
-end_time_entry_box = Entry(master, textvariable=end_time, width=5)
-end_time_entry_box.place(x=65, y=375, height=25)
+end_time_label.place(x=100, y=355)
+end_time1 = StringVar()
+end_time1.set("hh")
+end_time_entry_box1 = Entry(master, textvariable=end_time1, width=3)
+end_time_entry_box1.place(x=105, y=375, height=25)
+
+# End Hour 2
+end_time2 = StringVar()
+end_time2.set("mm")
+end_time_entry_box2 = Entry(master, textvariable=end_time2, width=3)
+end_time_entry_box2.place(x=135, y=375, height=25)
 
 
-# Time Elapsed for Hours and Minutes
-def elapsed_time(start, end):
-    a = datetime.strptime(start, '%H:%M')
-    b = datetime.strptime(end, '%H:%M')
+# Time Elapsed
+def time_elapsed(year1, month1, day1, hour1, min1, year2, month2, day2, hour2, min2):
+    start_time = datetime(int(year1), int(month1), int(day1), int(hour1), int(min1))
+    end_time = datetime(int(year2), int(month2), int(day2), int(hour2), int(min2))
 
-    diff = b - a
+    c = end_time - start_time
+    txt = str(c)[:-3]  # string can change if days are included or not
+    z = re.split("\\s", txt)  # splits into "###, days, hh:mm"
+    a = re.split(":", ", ".join(z))  # splits only hh:mm and removes a set of brackets on the hh:mm
+    if "-" in txt:
+        return 'date error'
+    # z length of 3 is equal to "###, days, hh:mm"
+    elif len(z) == 3 and z[2] and z[2][-2:] == "00" and z[2][:-3] == "0":
+        return z[0] + "d"  # gives #d only
+    elif len(z) == 3 and z[2] and z[2][:-3] == "0":
+        return z[0] + "d" + " " + str(int(z[2][-2:])) + "m"  # gives #d and #m int function removes leading zero
+    elif len(z) == 3 and z[2] and z[2][-2:] == "0":
+        return z[0] + "d" + " " + z[2][:-3] + "h"  # gives #d #h
+    elif len(z) == 3 and z[2]:
+        return z[0] + "d" + " " + z[2][:-3] + "h" + " " + str(int(z[2][-2:])) + "m"  # gives #d #h #m int func removes leading zero
 
-    hours = int(diff.seconds // (60 * 60))
-    mins = int((diff.seconds // 60) % 60)
-    if hours == 0 and mins == 0:
-        return str('')
-    elif hours > 0 and mins > 0:
-        return str(hours) + "h " + (str(mins) + "m")
-    elif hours > 0:
-        return str(hours) + "h"
-    elif mins > 0:
-        return str(mins) + "m"
-    elif mins == 0:
-        return str("N/A")
+    # z length of 1 is equal to "hh:mm"
+    elif len(z) == 1 and a[1] == "00":
+        return a[0] + "h"  # gives #h
+    elif len(z) == 1 and a[0] == "0":
+        return str(int(a[1])) + "m"  # gives #m int function removes leading zero
+    elif len(z) == 1:
+        return a[0] + "h" + " " + str(int(a[1])) + "m"  # gives #H #m int function removes leading zero
     else:
-        pass
+        print('no match')
+
+
+def resolved_checker():
+    if status_variable.get() == "Resolved" or status_variable.get() == "New/Resolved" or \
+            status_variable.get() == "Re-occurring/Resolved":
+        return str(sel_date2[0:4]) + "-" + str(sel_date2[5:7]) + "-" + str(sel_date2[8:10]) + " " + \
+               str((end_time1.get().rjust(2, '0'))) + ":" + str((end_time2.get().rjust(2, '0'))) + " (GMT+8)"
+    else:
+        return "N/A"
 
 
 sel_date1 = None
@@ -287,19 +308,6 @@ def get_date2():
         sel_date2 = cal.get_date()
         splash_window.destroy()
         return sel_date2
-
-
-# Day Difference Calculator
-def num_of_days(year1, month1, day1, year2, month2, day2):
-    date1 = date(int(str(year1)), int(str(month1)), int(str(day1)))
-    date2 = date(int(str(year2)), int(str(month2)), int(str(day2)))
-    date_diff = (date2 - date1).days
-    if date_diff > 0:
-        return " " + str(date_diff) + "d"
-    elif date_diff < 0:
-        return str('less than zero')
-    else:
-        return str("")
 
 
 button = Button(master, text="End Date", command=lambda: get_date2())
@@ -549,8 +557,10 @@ def print_template():
         messagebox.showinfo('Error',
                             'There was an error! Please check the minimum required fields for an escalation!\n'
                             '發生錯誤! 請確認各欄位!')
-    elif num_of_days(sel_date1[0:4], sel_date1[5:7], sel_date1[8:10], sel_date2[0:4], sel_date2[5:7],
-                     sel_date2[8:10]) == 'less than zero':
+    elif time_elapsed(int(sel_date1[0:4]), int(sel_date1[5:7]), int(sel_date1[8:10]),
+                            int(start_time1.get()), int(start_time2.get()), int(sel_date2[0:4]),
+                            int(sel_date2[5:7]), int(sel_date2[8:10]), int(end_time1.get()),
+                            int(end_time2.get())) == 'date error':
         messagebox.showinfo('Date Error', 'Check the date! \n'
                                           '     確認日期')
     elif items is None or op_items is None:
@@ -586,15 +596,9 @@ def print_template():
                                                       f'<br><b>Affecting System: </b>{", ".join(items)}'
                                                       f'<br><b>Tier: </b>{tier_variable.get()}'
                                                       f'<br><b>Operator: </b>{", ".join(op_items)}'
-                                                      f"""<br><b>Time Elapsed:</b> {num_of_days(sel_date1[0:4],
-                                                                                                sel_date1[5:7],
-                                                                                                sel_date1[8:10],
-                                                                                                sel_date2[0:4],
-                                                                                                sel_date2[5:7],
-                                                                                                sel_date2[8:10])}
-                                                                    {elapsed_time(start_time.get(), end_time.get())}"""
+                                                      f"""<br><b>Time Elapsed:</b> {time_elapsed(int(sel_date1[0:4]), int(sel_date1[5:7]), int(sel_date1[8:10]), int(start_time1.get()), int(start_time2.get()), int(sel_date2[0:4]), int(sel_date2[5:7]), int(sel_date2[8:10]), int(end_time1.get()),int(end_time2.get()))}"""
                                                       f'<br><b>Start Time: </b>{sel_date1[0:4]}-{sel_date1[5:7]}-'
-                                                      f'{sel_date1[8:10]} {start_time.get()} (GMT+8)'
+                                                      f"""{sel_date1[0:4]}-{sel_date1[5:7]}-{sel_date1[8:10]} {(start_time1.get().rjust(2, '0'))}:{(start_time2.get().rjust(2, '0'))} (GMT+8)"""
                                                       f'<br><b>End Time: </b>{resolved_checker()}'
                                                       f'<br><b>Service Degradation: </b>{service_degradation_variable.get()}'
                                                       f'<br><b>Symptoms: </b>{symptoms.get("1.0", "end-1c")}'
@@ -637,12 +641,14 @@ def print_template():
             T.insert("end", f"{tier_variable.get()}\n")
             T.insert("end", "Operator: ", "bold")
             T.insert("end", f"{', '.join(op_items)}\n")
-            T.insert("end", "Time Elapsed:", "bold")
+            T.insert("end", "Time Elapsed: ", "bold")
             T.insert("end",
-                     f"""{num_of_days(sel_date1[0:4], sel_date1[5:7], sel_date1[8:10], sel_date2[0:4], sel_date2[5:7],
-            sel_date2[8:10])} {elapsed_time(start_time.get(), end_time.get())}\n""")
+                     f"""{time_elapsed(int(sel_date1[0:4]), int(sel_date1[5:7]), int(sel_date1[8:10]),
+                            int(start_time1.get()), int(start_time2.get()), int(sel_date2[0:4]), 
+                            int(sel_date2[5:7]), int(sel_date2[8:10]), int(end_time1.get()),
+                            int(end_time2.get()))}\n""")
             T.insert("end", "Start Time: ", "bold")
-            T.insert("end", f"{sel_date1[0:4]}-{sel_date1[5:7]}-{sel_date1[8:10]} {start_time.get()} (GMT+8)\n")
+            T.insert("end", f"{sel_date1[0:4]}-{sel_date1[5:7]}-{sel_date1[8:10]} {(start_time1.get().rjust(2, '0'))}:{(start_time2.get().rjust(2, '0'))} (GMT+8)\n")
             T.insert("end", "End Time: ", "bold")
             T.insert("end", f"{resolved_checker()}\n")
             T.insert("end", "Service Degradation: ", "bold")
