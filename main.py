@@ -128,7 +128,7 @@ comms_manager = ["Abri Liebenberg (+61 432823087)",
                  "Jeff Huang (+886 933308768)",
                  "Jill Shen (+886 903438345)",
                  "Frank Hsu (+886 972211756)",
-                 "Juan Gilpin (+886 909948943)"
+                 "Juan Gilpin (+886 909948943)",
                  "Ran Alkalay",
                  "Arik Klein",
                  "Jamil Saab",
