@@ -597,7 +597,7 @@ def print_template():
                                                       f'<br><b>Tier: </b>{tier_variable.get()}'
                                                       f'<br><b>Operator: </b>{", ".join(op_items)}'
                                                       f"""<br><b>Time Elapsed:</b> {time_elapsed(int(sel_date1[0:4]), int(sel_date1[5:7]), int(sel_date1[8:10]), int(start_time1.get()), int(start_time2.get()), int(sel_date2[0:4]), int(sel_date2[5:7]), int(sel_date2[8:10]), int(end_time1.get()),int(end_time2.get()))}"""
-                                                      f'<br><b>Start Time: </b>{sel_date1[0:4]}-{sel_date1[5:7]}-'
+                                                      f'<br><b>Start Time: </b>'
                                                       f"""{sel_date1[0:4]}-{sel_date1[5:7]}-{sel_date1[8:10]} {(start_time1.get().rjust(2, '0'))}:{(start_time2.get().rjust(2, '0'))} (GMT+8)"""
                                                       f'<br><b>End Time: </b>{resolved_checker()}'
                                                       f'<br><b>Service Degradation: </b>{service_degradation_variable.get()}'
