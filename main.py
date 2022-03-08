@@ -1,5 +1,5 @@
-from tkinter import Tk, Label, StringVar, OptionMenu, Entry, Text, Scrollbar, RIGHT, Y, Listbox, YES, Button,\
-    mainloop, END, Frame, messagebox, TclError, WORD, Menu
+from tkinter import Tk, Label, StringVar, OptionMenu, Entry, Text, Scrollbar, RIGHT, Y, Listbox, YES, Button, \
+    mainloop, END, Frame, messagebox, TclError, WORD, Menu, font
 from tkcalendar import Calendar
 import bitlyshortener
 from bitlyshortener.exc import RequestError, ArgsError, ShortenerError
@@ -17,7 +17,7 @@ screen_height = master.winfo_screenheight()
 x = (screen_width / 2) - (app_width / 2)
 y = (screen_height / 2) - (app_height / 2)
 master.geometry(f'{app_width}x{app_height}+{int(x)}+{int(y)}')  # main window start in the center of the screen
-master.title('High Severity Escalation App --Version 5.0')
+master.title('High Severity Escalation App --Version 5.5')
 
 
 # File Menu
@@ -174,39 +174,39 @@ name_entry_box.place(x=0, y=120, height=25)
 
 # Tier
 tier_label = Label(master, text="Tier", font=("Ariel", 10, "bold"))
-tier_label.place(x=0, y=175)
+tier_label.place(x=75, y=0)
 tier_variable = StringVar(master)
 tier_variable.set(tier[0])  # default value
 tier_options = OptionMenu(master, tier_variable, *tier)
-tier_options.place(y=193, x=0)
+tier_options.place(x=75, y=17)
 
 # Start Hour 1
 start_time_label = Label(master, text="Start Time (GMT+8):", font=("Ariel", 10, "bold"))
-start_time_label.place(x=100, y=305)
+start_time_label.place(x=65, y=340)
 start_time1 = StringVar()
 start_time1.set("hh")
-start_time_entry_box1 = Entry(master, textvariable=start_time1, width=3)
-start_time_entry_box1.place(x=105, y=325, height=25)
+start_time_entry_box1 = Entry(master, textvariable=start_time1, width=4)
+start_time_entry_box1.place(x=65, y=365, height=25)
 
 # Start Hour 2
 start_time2 = StringVar()
 start_time2.set("mm")
-start_time_entry_box2 = Entry(master, textvariable=start_time2, width=3)
-start_time_entry_box2.place(x=135, y=325, height=25)
+start_time_entry_box2 = Entry(master, textvariable=start_time2, width=4)
+start_time_entry_box2.place(x=95, y=365, height=25)
 
 # End Hour 1
 end_time_label = Label(master, text="Now/End Time (GMT+8):", font=("Ariel", 10, "bold"))
-end_time_label.place(x=100, y=355)
+end_time_label.place(x=65, y=400)
 end_time1 = StringVar()
 end_time1.set("hh")
-end_time_entry_box1 = Entry(master, textvariable=end_time1, width=3)
-end_time_entry_box1.place(x=105, y=375, height=25)
+end_time_entry_box1 = Entry(master, textvariable=end_time1, width=4)
+end_time_entry_box1.place(x=65, y=425, height=25)
 
 # End Hour 2
 end_time2 = StringVar()
 end_time2.set("mm")
-end_time_entry_box2 = Entry(master, textvariable=end_time2, width=3)
-end_time_entry_box2.place(x=135, y=375, height=25)
+end_time_entry_box2 = Entry(master, textvariable=end_time2, width=4)
+end_time_entry_box2.place(x=95, y=425, height=25)
 
 
 # Time Elapsed
@@ -280,10 +280,10 @@ def get_date1():
 
 
 button = Button(master, text="Start Date", command=lambda: get_date1())
-button.place(x=0, y=305)
+button.place(x=0, y=340)
 
 cal_label1 = Label(master, text="")
-cal_label1.place(x=0, y=330)
+cal_label1.place(x=0, y=369)
 
 
 # Calendar2
@@ -311,10 +311,10 @@ def get_date2():
 
 
 button = Button(master, text="End Date", command=lambda: get_date2())
-button.place(x=0, y=350)
+button.place(x=0, y=400)
 
 cal_label2 = Label(master, text="")
-cal_label2.place(x=0, y=375)
+cal_label2.place(x=0, y=430)
 
 
 # Show Current Time
@@ -324,7 +324,7 @@ def clock():
     second = time.strftime("%S")
 
     clock_label = Label(master)
-    clock_label.place(x=0, y=260)
+    clock_label.place(x=0, y=300)
     clock_label.config(text="Current Time (GMT+8): \n" + hour + ":" + minute + ":" + second,
                        justify="left", font=("Ariel", 10, "bold"))
     clock_label.after(1000, clock)
@@ -334,11 +334,11 @@ clock()
 
 # Service Degradation
 service_degradation_label = Label(master, text="Service Degradation", font=("Ariel", 10, "bold"))
-service_degradation_label.place(x=0, y=400)
+service_degradation_label.place(x=70, y=45)
 service_degradation_variable = StringVar(master)
 service_degradation_variable.set(service_degradation[0])  # default value
 service_degradation_options = OptionMenu(master, service_degradation_variable, *service_degradation)
-service_degradation_options.place(y=420, x=0)
+service_degradation_options.place(x=70, y=65)
 
 # Symptoms
 symptoms_label = Label(master, text="Symptoms", font=("Ariel", 10, "bold"))
@@ -349,70 +349,70 @@ symptoms.place(x=0, y=470, height=100, width=390)
 
 # Action Taken
 action_taken_label = Label(master, text="Action Taken", font=("Ariel", 10, "bold"))
-action_taken_label.place(x=550, y=20)
+action_taken_label.place(x=550, y=0)
 action_taken = Text(master, undo=True, wrap=WORD)
 action_taken.insert("3.0", "Internal testing showed no errors on our system. "
                            "ITOC is contacting relevant teams. "
                            "ITOC is checking with the operator.")
-action_taken.place(x=400, y=40, width=390, height=100)
+action_taken.place(x=400, y=20, width=390, height=130)
 action_taken.get("1.0", "end-1c")
 
 # Root Cause
 root_cause_label = Label(master, text="Root Cause", font=("Ariel", 10, "bold"))
-root_cause_label.place(x=400, y=175)
+root_cause_label.place(x=150, y=0)
 root_cause_variable = StringVar(master)
 root_cause_variable.set(root_cause[0])  # default value
 root_cause_options = OptionMenu(master, root_cause_variable, *root_cause)
-root_cause_options.place(y=193, x=400)
+root_cause_options.place(x=150, y=17)
 
 # Comms Manager
 comms_manager_label = Label(master, text="Comms Manager", font=("Ariel", 10, "bold"))
-comms_manager_label.place(x=400, y=250)
+comms_manager_label.place(x=400, y=150)
 comms_manager_variable = StringVar(master)
 comms_manager_variable.set(comms_manager[0])  # default value
 comms_manager_options = OptionMenu(master, comms_manager_variable, *comms_manager)
-comms_manager_options.place(y=270, x=400)
+comms_manager_options.place(x=400, y=170)
 
 # Crisis Manager
 crisis_manager_label = Label(master, text="Crisis Manager", font=("Ariel", 10, "bold"))
-crisis_manager_label.place(x=400, y=300)
+crisis_manager_label.place(x=400, y=200)
 crisis_manager_variable = StringVar(master)
 crisis_manager_variable.set(crisis_manager[0])  # default value
 crisis_manager_options = OptionMenu(master, crisis_manager_variable, *crisis_manager)
-crisis_manager_options.place(y=320, x=400)
+crisis_manager_options.place(x=400, y=220)
 
 # Escalated by
 escalated_by_label = Label(master, text="Escalated by:", font=("Ariel", 10, "bold"))
-escalated_by_label.place(x=400, y=350)
+escalated_by_label.place(x=400, y=250)
 escalated_by = StringVar()
 escalated_by.set("XXXX (+886 226 560 700 ext 207)")
 escalated_by_entry_box = Entry(master, textvariable=escalated_by, width=50)
-escalated_by_entry_box.place(x=400, y=370, height=25)
+escalated_by_entry_box.place(x=400, y=270, height=25)
 
 # Clik ID
 clik_id_label = Label(master, text="Clik ID (ITOC PD) SUPL-XXXX", font=("Ariel", 10, "bold"))
-clik_id_label.place(x=400, y=395)
+clik_id_label.place(x=400, y=300)
 clik_id = StringVar()
 clik_id.set("N/A")
 clik_id_entry_box = Entry(master, textvariable=clik_id, width=50)
-clik_id_entry_box.place(x=400, y=415, height=25)
+clik_id_entry_box.place(x=400, y=320, height=25)
 
 # Customer Ref
 customer_ref_label = Label(master, text="Customer Ref# (AS Jira) SUPL-XXXX", font=("Ariel", 10, "bold"))
-customer_ref_label.place(x=400, y=440)
+customer_ref_label.place(x=400, y=350)
 customer_ref = StringVar()
 customer_ref.set("N/A")
 customer_ref_entry_box = Entry(master, textvariable=customer_ref, width=50)
-customer_ref_entry_box.place(x=400, y=460, height=25)
+customer_ref_entry_box.place(x=400, y=380, height=25)
 
 # Teams Chat/Bitly shorten to list
 teams_chat_label = Label(master, text='Shorten to Bitly URL (needs "https://"): \n'
                                       'Join Microsoft Teams Chat', justify="left", font=("Ariel", 10, "bold"))
-teams_chat_label.place(x=400, y=505, anchor="w")
+teams_chat_label.place(x=400, y=430, anchor="w")
 bitly_url = StringVar()
 bitly_url.set("N/A")
 teams_chat_entry_box = Entry(master, textvariable=bitly_url, width=50)
-teams_chat_entry_box.place(x=400, y=520, height=25)
+teams_chat_entry_box.place(x=400, y=460, height=25)
 
 
 # Bitly Setup
@@ -474,7 +474,7 @@ def select_affecting_system():
     # Displays current selection
     def select():
         global af_label
-        af_label = Label(af_frame, text=(', '.join(items)), wraplength=240, justify="center")
+        af_label = Label(af_frame, text=(', '.join(items)), wraplength=100, justify="center")
         af_label.pack()
         splash_window.destroy()
 
@@ -486,11 +486,11 @@ def select_affecting_system():
 
 # Affecting System Buttons
 af_button = Button(master, text="Affecting System:", command=lambda: select_affecting_system())
-af_button.place(y=147, x=0)
+af_button.place(x=0, y=147)
 
 # Affecting System Frame
-af_frame = Frame(master, width=235, height=80)
-af_frame.place(x=150, y=150)
+af_frame = Frame(master)
+af_frame.place(x=0, y=180)
 
 # Setup error statement in print function
 op_items = None
@@ -541,11 +541,11 @@ def select_operators():
 
 # Operator Buttons
 operator_button = Button(master, text="Operators:", command=lambda: select_operators())
-operator_button.place(y=230, x=0)
+operator_button.place(x=150, y=147)
 
 # Operator Frame
 op_frame = Frame(master)
-op_frame.place(x=200, y=230)
+op_frame.place(x=130, y=180)
 
 
 def print_template():
@@ -686,8 +686,10 @@ def print_template():
 
         mainloop()
 
-
 print_button = Button(master, text="Print", command=lambda: print_template())
-print_button.place(y=0, x=350)
+print_button_font = font.Font(size=0, weight='bold')
+print_button['font'] = print_button_font
+print_button.config(height=2, width=10)
+print_button.place(x=600, y=500)
 
 mainloop()
