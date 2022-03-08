@@ -1,5 +1,5 @@
 from tkinter import Tk, Label, StringVar, OptionMenu, Entry, Text, Scrollbar, RIGHT, Y, Listbox, YES, Button, \
-    mainloop, END, Frame, messagebox, TclError, WORD, Menu, font, Canvas
+    mainloop, END, Frame, messagebox, TclError, WORD, Menu, font
 from tkcalendar import Calendar
 import bitlyshortener
 from bitlyshortener.exc import RequestError, ArgsError, ShortenerError
@@ -37,13 +37,17 @@ def help():
     help_box = Text(splash_window, height=25, width=80, undo=True, wrap=WORD)
     help_box.insert("end", "Help\n\n"
                            "1. Time Elapsed is automatically calculated. You just need to fill in the 'Now' time. "
-                           "Only resolved escalations will have End Time printed.\n\n"
+                           "Only resolved escalations will have End Time printed. Time Elapsed 是自動計算的. "
+                           "只需要填寫“現在”時間. 只有Resolved才會打印 End Time\n\n"
                            "2. You need to use the Copy button on the print page to copy the bold. You can only copy "
-                           "to HTML editors.\n\n"
+                           "to HTML editors. 您需要使用打印頁面上的複制按鈕來複製粗體. 您只能複製到 HTML 編輯器.\n\n"
                            "3. Bitly API can only do 100 free URLs a month."
-                           " You can login to Bitly with our own account.\n\n"
-                           "4. Symptoms will default to escalation name if left blank. \n\n"
-                           "5. Crisis Manager will default to Comms Manager if blank or 'Comms Manager' filled in.")
+                           " You can login to Bitly with our own account. Bitly API 每月只能做 100 個免費 UR."
+                           " 您可以使用我們自己的帳戶登錄 Bitly.\n\n"
+                           "4. Symptoms will default to escalation name if left blank.如果留空，"
+                           "Symptoms將默認為 Escalation Name。 \n\n"
+                           "5. Crisis Manager will default to Comms Manager if blank or 'Comms Manager' filled in. "
+                           "如果為空白或填寫“Comms Manager”，Crisis Manager 將默認為 Comms Manager. ")
     help_box.pack()
 
 
