@@ -1,5 +1,5 @@
 from tkinter import Tk, Label, StringVar, OptionMenu, Entry, Text, Scrollbar, RIGHT, Y, Listbox, YES, Button, \
-    mainloop, END, Frame, messagebox, TclError, WORD, Menu, font
+    mainloop, END, Frame, messagebox, TclError, WORD, Menu, font, Canvas
 from tkcalendar import Calendar
 import bitlyshortener
 from bitlyshortener.exc import RequestError, ArgsError, ShortenerError
@@ -17,7 +17,7 @@ screen_height = master.winfo_screenheight()
 x = (screen_width / 2) - (app_width / 2)
 y = (screen_height / 2) - (app_height / 2)
 master.geometry(f'{app_width}x{app_height}+{int(x)}+{int(y)}')  # main window start in the center of the screen
-master.title('High Severity Escalation App --Version 5.5')
+master.title('High Severity Escalation App --Version 6.0')
 
 
 # File Menu
@@ -36,12 +36,14 @@ def help():
     yscrollbar.pack(side=RIGHT, fill=Y)
     help_box = Text(splash_window, height=25, width=80, undo=True, wrap=WORD)
     help_box.insert("end", "Help\n\n"
-                           "1. Time Elapsed is automatically calculated. You just need to fill in the 'Now' time.\n\n"
+                           "1. Time Elapsed is automatically calculated. You just need to fill in the 'Now' time. "
+                           "Only resolved escalations will have End Time printed.\n\n"
                            "2. You need to use the Copy button on the print page to copy the bold. You can only copy "
                            "to HTML editors.\n\n"
                            "3. Bitly API can only do 100 free URLs a month."
                            " You can login to Bitly with our own account.\n\n"
-                           "4. Only resolved escalations will have End Time printed.")
+                           "4. Symptoms will default to escalation name if left blank. \n\n"
+                           "5. Crisis Manager will default to Comms Manager if blank or 'Comms Manager' filled in.")
     help_box.pack()
 
 
@@ -332,9 +334,14 @@ service_degradation_options.place(x=70, y=65)
 symptoms_label = Label(master, text="Symptoms", font=("Ariel", 10, "bold"))
 symptoms_label.place(x=0, y=450)
 symptoms = Text(master, undo=True, wrap=WORD)
-symptoms.insert("3.0", "GPM degradation by XX% affecting XXX")
+symptoms.insert("3.0", "")
 symptoms.place(x=0, y=470, height=100, width=390)
 
+def symptoms_checker():
+    if symptoms.get('1.0', 'end-1c') == "" or symptoms.get('1.0', 'end-1c') == name.get():
+        return name.get()
+    else:
+        return symptoms.get('1.0', 'end-1c')
 # Action Taken
 action_taken_label = Label(master, text="Action Taken", font=("Ariel", 10, "bold"))
 action_taken_label.place(x=550, y=0)
@@ -598,7 +605,7 @@ def print_template():
                                                       f"""{sel_date1[0:4]}-{sel_date1[5:7]}-{sel_date1[8:10]} {(start_time1.get().rjust(2, '0'))}:{(start_time2.get().rjust(2, '0'))} (GMT+8)"""
                                                       f'<br><b>End Time: </b>{resolved_checker()}'
                                                       f'<br><b>Service Degradation: </b>{service_degradation_variable.get()}'
-                                                      f'<br><b>Symptoms: </b>{symptoms.get("1.0", "end-1c")}'
+                                                      f'<br><b>Symptoms: </b>{symptoms_checker()}'
                                                       f'<br><b>Action Taken: </b>{action_taken.get("1.0", "end-1c")}'
                                                       f'<br><b>Root Cause: </b>{root_cause_variable.get()}'
                                                       f'<br><b>Comms Manager: </b>{comms_manager_variable.get()}'
@@ -651,7 +658,7 @@ def print_template():
             T.insert("end", "Service Degradation: ", "bold")
             T.insert("end", f"{service_degradation_variable.get()}\n")
             T.insert("end", "Symptoms: ", "bold")
-            T.insert("end", f"{symptoms.get('1.0', 'end-1c')}\n")
+            T.insert("end", f"{symptoms_checker()}\n")
             T.insert("end", "Action Taken: ", "bold")
             T.insert("end", f"{action_taken.get('1.0', 'end-1c')}\n")
             T.insert("end", "Root Cause: ", "bold")
