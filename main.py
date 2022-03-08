@@ -135,18 +135,6 @@ comms_manager = ["Abri Liebenberg (+61 432823087)",
                  "Jamil Saab",
                  "Yaacov Pines"]
 
-crisis_manager = ["Abri Liebenberg (+61 432823087)",
-                  "Matt Cheng (+886 932075280)",
-                  "Matthew Geoghegan (+886 905249541)",
-                  "Bartosz Lewandowski (+886 978705232)",
-                  "Jeff Huang (+886 933308768)",
-                  "Jill Shen (+886 903438345)",
-                  "Frank Hsu (+886 972211756)",
-                  "Juan Gilpin (+886 909948943)",
-                  "Ran Alkalay",
-                  "Arik Klein",
-                  "Jamil Saab",
-                  "Yaacov Pines"]
 
 # Status Dropdown Menu
 status_label = Label(master, text="Status", font=("Ariel", 10, "bold"))
@@ -184,13 +172,13 @@ tier_options.place(x=75, y=17)
 start_time_label = Label(master, text="Start Time (GMT+8):", font=("Ariel", 10, "bold"))
 start_time_label.place(x=65, y=340)
 start_time1 = StringVar()
-start_time1.set("hh")
+start_time1.set("HH")
 start_time_entry_box1 = Entry(master, textvariable=start_time1, width=4)
 start_time_entry_box1.place(x=65, y=365, height=25)
 
 # Start Hour 2
 start_time2 = StringVar()
-start_time2.set("mm")
+start_time2.set("MM")
 start_time_entry_box2 = Entry(master, textvariable=start_time2, width=4)
 start_time_entry_box2.place(x=95, y=365, height=25)
 
@@ -198,13 +186,13 @@ start_time_entry_box2.place(x=95, y=365, height=25)
 end_time_label = Label(master, text="Now/End Time (GMT+8):", font=("Ariel", 10, "bold"))
 end_time_label.place(x=65, y=400)
 end_time1 = StringVar()
-end_time1.set("hh")
+end_time1.set("HH")
 end_time_entry_box1 = Entry(master, textvariable=end_time1, width=4)
 end_time_entry_box1.place(x=65, y=425, height=25)
 
 # End Hour 2
 end_time2 = StringVar()
-end_time2.set("mm")
+end_time2.set("MM")
 end_time_entry_box2 = Entry(master, textvariable=end_time2, width=4)
 end_time_entry_box2.place(x=95, y=425, height=25)
 
@@ -377,9 +365,18 @@ comms_manager_options.place(x=400, y=170)
 crisis_manager_label = Label(master, text="Crisis Manager", font=("Ariel", 10, "bold"))
 crisis_manager_label.place(x=400, y=200)
 crisis_manager_variable = StringVar(master)
-crisis_manager_variable.set(crisis_manager[0])  # default value
-crisis_manager_options = OptionMenu(master, crisis_manager_variable, *crisis_manager)
-crisis_manager_options.place(x=400, y=220)
+crisis_manager_variable.set("Comms Manager")
+crisis_manager_entry_box = Entry(master, textvariable=crisis_manager_variable, width=50)
+crisis_manager_entry_box.place(x=400, y=220, height=25)
+
+
+def crisis_man_checker():
+    if crisis_manager_variable.get().lower() == "comms manager" or crisis_manager_variable.get().lower() == "comms"\
+            or crisis_manager_variable.get() == "communication manager" or crisis_manager_variable.get() == "":
+        return comms_manager_variable.get()
+    else:
+        return crisis_manager_variable.get()
+
 
 # Escalated by
 escalated_by_label = Label(master, text="Escalated by:", font=("Ariel", 10, "bold"))
@@ -605,7 +602,7 @@ def print_template():
                                                       f'<br><b>Action Taken: </b>{action_taken.get("1.0", "end-1c")}'
                                                       f'<br><b>Root Cause: </b>{root_cause_variable.get()}'
                                                       f'<br><b>Comms Manager: </b>{comms_manager_variable.get()}'
-                                                      f'<br><b>Crisis Manager: </b>{crisis_manager_variable.get()}'
+                                                      f'<br><b>Crisis Manager: </b>{crisis_man_checker()}'
                                                       f'<br><b>Escalated by: </b>{escalated_by.get()}'
                                                       f'<br>'
                                                       f'<br><b>Clik ID: </b>{clik_id.get()}'
@@ -662,7 +659,7 @@ def print_template():
             T.insert("end", "Comms Manager: ", "bold")
             T.insert("end", f"{comms_manager_variable.get()}\n")
             T.insert("end", "Crisis Manager: ", "bold")
-            T.insert("end", f"{crisis_manager_variable.get()}\n")
+            T.insert("end", f"{crisis_man_checker()}\n")
             T.insert("end", "Escalated by: ", "bold")
             T.insert("end", f" {escalated_by.get()}\n\n")
             T.insert("end", "Clik ID: ", "bold")
