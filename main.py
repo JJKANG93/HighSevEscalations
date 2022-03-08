@@ -123,7 +123,7 @@ operator = ["all",
             "-------------------------QF2-----------------------",
             "SBO"]
 
-service_degradation = ["N/A", "25%", "Over 25%", "50%", "Over 50%", "75%", "Over 75%", "100%"]
+service_degradation = ["N/A", "25%", "Over 25%", "50%", "Over 50%", "75%", "Over 75%", "99%", "100%"]
 
 root_cause = ["N/A", "Internal", "Operator", "Regular Maintenance", "Network", "Internal-3rd Party", "Internal-MG+",
               "Unknown"]
@@ -152,11 +152,11 @@ status_options.place(y=16, x=0)
 
 # Severity Dropdown Menu
 severity_label = Label(master, text="Severity", font=("Ariel", 10, "bold"))
-severity_label.place(x=0, y=45)
+severity_label.place(x=165, y=0)
 severity_variable = StringVar(master)
 severity_variable.set(severity[0])  # default value
 severity_options = OptionMenu(master, severity_variable, *severity)
-severity_options.place(y=65, x=0)
+severity_options.place(x=165, y=17)
 
 # Escalation Name
 name_label = Label(master, text="Escalation Name", font=("Ariel", 10, "bold"))
@@ -168,11 +168,11 @@ name_entry_box.place(x=0, y=120, height=25)
 
 # Tier
 tier_label = Label(master, text="Tier", font=("Ariel", 10, "bold"))
-tier_label.place(x=75, y=0)
+tier_label.place(x=240, y=0)
 tier_variable = StringVar(master)
 tier_variable.set(tier[0])  # default value
 tier_options = OptionMenu(master, tier_variable, *tier)
-tier_options.place(x=75, y=17)
+tier_options.place(x=240, y=17)
 
 # Start Hour 1
 start_time_label = Label(master, text="Start Time (GMT+8):", font=("Ariel", 10, "bold"))
@@ -328,11 +328,11 @@ clock()
 
 # Service Degradation
 service_degradation_label = Label(master, text="Service Degradation", font=("Ariel", 10, "bold"))
-service_degradation_label.place(x=70, y=45)
+service_degradation_label.place(x=160, y=45)
 service_degradation_variable = StringVar(master)
 service_degradation_variable.set(service_degradation[0])  # default value
 service_degradation_options = OptionMenu(master, service_degradation_variable, *service_degradation)
-service_degradation_options.place(x=70, y=65)
+service_degradation_options.place(x=160, y=65)
 
 # Symptoms
 symptoms_label = Label(master, text="Symptoms", font=("Ariel", 10, "bold"))
@@ -358,11 +358,12 @@ action_taken.get("1.0", "end-1c")
 
 # Root Cause
 root_cause_label = Label(master, text="Root Cause", font=("Ariel", 10, "bold"))
-root_cause_label.place(x=150, y=0)
+root_cause_label.place(x=0, y=45)
 root_cause_variable = StringVar(master)
 root_cause_variable.set(root_cause[0])  # default value
 root_cause_options = OptionMenu(master, root_cause_variable, *root_cause)
-root_cause_options.place(x=150, y=17)
+root_cause_options.place(x=0, y=65)
+
 
 # Comms Manager
 comms_manager_label = Label(master, text="Comms Manager", font=("Ariel", 10, "bold"))
