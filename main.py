@@ -7,6 +7,7 @@ import re
 import time
 from datetime import datetime
 import klembord
+import json
 
 # Main Window
 master = Tk()
@@ -141,6 +142,11 @@ comms_manager = ["Abri Liebenberg (+61 432823087)",
                  "Jamil Saab",
                  "Yaacov Pines"]
 
+
+list_config = ['status', 'severity', 'affecting_system', 'tier', 'operator', 'service_degradation', 'root_cause', 'comms_manager']
+data = {listname: globals()[listname] for listname in list_config}
+with open('config.json', 'w') as outfile:
+    json.dump(data, outfile, indent=4)
 
 # Status Dropdown Menu
 status_label = Label(master, text="Status", font=("Ariel", 10, "bold"))
@@ -696,6 +702,7 @@ def print_template():
             pass
 
         mainloop()
+
 
 print_button = Button(master, text="Print", command=lambda: print_template())
 print_button_font = font.Font(size=0, weight='bold')
