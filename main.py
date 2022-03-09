@@ -59,7 +59,7 @@ filemenu.add_command(label="Help", command=help)
 menubar.add_cascade(label="File", menu=filemenu)
 master.config(menu=menubar)
 
-# Opening JSON file
+# Opening JSON file and put them into a list
 status = []
 severity = []
 affecting_system = []
@@ -87,6 +87,7 @@ with open('config.json') as json_file: #This doesn't
     comms_manager_list = list(data.values())
     comms_manager.append(comms_manager_list[7])
 
+# Create another list for the functions to use
 status2 = []
 for x in status:
     for y in x:
