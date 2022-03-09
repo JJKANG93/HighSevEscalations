@@ -488,6 +488,7 @@ def select_affecting_system():
         splash_window.destroy()
 
     Button(splash_window, text="Select", command=lambda: select()).pack(pady=0)
+    items.clear()
     af_label.destroy()
 
     splash_window.mainloop()
@@ -543,6 +544,7 @@ def select_operators():
         splash_window.destroy()
 
     Button(splash_window, text="Select", command=lambda: select()).pack(pady=0)
+    op_items.clear()
     op_label.destroy()
 
     splash_window.mainloop()
@@ -572,7 +574,7 @@ def print_template():
                             int(end_time2.get())) == 'date error':
         messagebox.showinfo('Date Error', 'Check the date! \n'
                                           '     確認日期')
-    elif items is None or op_items is None:
+    elif items is None or op_items is None or items == [] or op_items == []:
         messagebox.showinfo('Error',
                             'There was an error! Please check the minimum required fields for an escalation!\n'
                             '發生錯誤! 請確認各欄位!')
