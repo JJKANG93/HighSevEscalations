@@ -59,109 +59,88 @@ filemenu.add_command(label="Help", command=help)
 menubar.add_cascade(label="File", menu=filemenu)
 master.config(menu=menubar)
 
-status = ["New",
-          "New/Resolved",
-          "Updated",
-          "Ongoing",
-          "On Hold",
-          "Resolved",
-          "Re-occurring",
-          "Re-occurring/Resolved",
-          "Canceled"]
+# Opening JSON file
+status = []
+severity = []
+affecting_system = []
+tier = []
+operator = []
+service_degradation = []
+root_cause = []
+comms_manager = []
+with open('config.json') as json_file: #This doesn't
+    data = json.load(json_file)
+    status_list = list(data.values())
+    status.append(status_list[0])
+    severity_list = list(data.values())
+    severity.append(severity_list[1])
+    affecting_system_list = list(data.values())
+    affecting_system.append(affecting_system_list[2])
+    tier_list = list(data.values())
+    tier.append(tier_list[3])
+    operator_list = list(data.values())
+    operator.append(operator_list[4])
+    service_degradation_list = list(data.values())
+    service_degradation.append(service_degradation_list[5])
+    root_cause_list = list(data.values())
+    root_cause.append(root_cause_list[6])
+    comms_manager_list = list(data.values())
+    comms_manager.append(comms_manager_list[7])
 
-severity = ["A", "B"]
+status2 = []
+for x in status:
+    for y in x:
+        status2.append(y)
 
-affecting_system = ["all", "Live Dealer", "TNGQuickfire", "MGP SW", "QF2", "Sempris", "TEG0", "TEG1", "TEG2", "TEG3",
-                    "TEG4", "TEG6"]
+severity2 = []
+for x in severity:
+    for y in x:
+        severity2.append(y)
 
-tier = ["N/A", "Tier_1", "Tier_2"]
+affecting_system2 = []
+for x in affecting_system:
+    for y in x:
+        affecting_system2.append(y)
 
-operator = ["all",
-            "-------------------------TEG0----------------------",
-            "Power_Asia",
-            "infini88",
-            "Asia888",
-            "ambtw",
-            "topusd3",
-            "TOP_USD2",
-            "Poseidon",
-            "TH1GAMES",
-            "TOP_USD(GAMA)",
-            "UEG",
-            "inplaymatrix",
-            "GplayG",
-            "-------------------------TEG1----------------------",
-            "GT",
-            "-------------------------TEG2----------------------",
-            "BBIN_CNY",
-            "-------------------------TEG3----------------------",
-            "JuGaming(A)",
-            "-------------------------TEG4----------------------",
-            "JuGamingA(6)",
-            "JuGamingA(12)",
-            "JuGamingA(18)",
-            "JuGamingA(25)",
-            "JuGamingA(28)",
-            "-------------------------TEG6----------------------",
-            "Oriental_Game",
-            "OG",
-            "-------------------------MGP SW--------------------",
-            "AMBSW",
-            "AMBGAMESSW",
-            "pay4dsw",
-            "-------------------------QF1-----------------------",
-            "Sempris",
-            "W88",
-            "Wild_Treasure",
-            "188bet",
-            "Asiabet",
-            "Solid_Gaming",
-            "GSD",
-            "Foxnos",
-            "M88",
-            "Asian_Logic",
-            "VWIN",
-            "-------------------------QF2-----------------------",
-            "SBO"]
+tier2 = []
+for x in tier:
+    for y in x:
+        tier2.append(y)
+        
+operator2 = []
+for x in operator:
+    for y in x:
+        operator2.append(y)
+        
+service_degradation2 = []
+for x in service_degradation:
+    for y in x:
+        service_degradation2.append(y)
 
-service_degradation = ["N/A", "25%", "Over 25%", "50%", "Over 50%", "75%", "Over 75%", "99%", "100%"]
+root_cause2 = []
+for x in root_cause:
+    for y in x:
+        root_cause2.append(y)
 
-root_cause = ["N/A", "Internal", "Operator", "Regular Maintenance", "Network", "Internal-3rd Party", "Internal-MG+",
-              "Unknown"]
-
-comms_manager = ["Abri Liebenberg (+61 432823087)",
-                 "Matt Cheng (+886 932075280)",
-                 "Matthew Geoghegan (+886 905249541)",
-                 "Bartosz Lewandowski (+886 978705232)",
-                 "Jeff Huang (+886 933308768)",
-                 "Jill Shen (+886 903438345)",
-                 "Frank Hsu (+886 972211756)",
-                 "Juan Gilpin (+886 909948943)",
-                 "Ran Alkalay",
-                 "Arik Klein",
-                 "Jamil Saab",
-                 "Yaacov Pines"]
-
-
-list_config = ['status', 'severity', 'affecting_system', 'tier', 'operator', 'service_degradation', 'root_cause', 'comms_manager']
-data = {listname: globals()[listname] for listname in list_config}
-with open('config.json', 'w') as outfile:
-    json.dump(data, outfile, indent=4)
+comms_manager2 = []
+for x in comms_manager:
+    for y in x:
+        comms_manager2.append(y)
 
 # Status Dropdown Menu
 status_label = Label(master, text="Status", font=("Ariel", 10, "bold"))
 status_label.place(x=0, y=0)
 status_variable = StringVar(master)
-status_variable.set(status[0])  # default value
-status_options = OptionMenu(master, status_variable, *status)
+status_variable.set(status2[0])  # default value
+status_options = OptionMenu(master, status_variable, *status2)
 status_options.place(y=16, x=0)
 
 # Severity Dropdown Menu
 severity_label = Label(master, text="Severity", font=("Ariel", 10, "bold"))
 severity_label.place(x=165, y=0)
 severity_variable = StringVar(master)
-severity_variable.set(severity[0])  # default value
-severity_options = OptionMenu(master, severity_variable, *severity)
+severity_variable.set(severity2[0])  # default value
+severity_options = OptionMenu(master, severity_variable, *severity2)
 severity_options.place(x=165, y=17)
 
 # Escalation Name
@@ -176,8 +155,8 @@ name_entry_box.place(x=0, y=120, height=25)
 tier_label = Label(master, text="Tier", font=("Ariel", 10, "bold"))
 tier_label.place(x=240, y=0)
 tier_variable = StringVar(master)
-tier_variable.set(tier[0])  # default value
-tier_options = OptionMenu(master, tier_variable, *tier)
+tier_variable.set(tier2[0])  # default value
+tier_options = OptionMenu(master, tier_variable, *tier2)
 tier_options.place(x=240, y=17)
 
 # Start Hour 1
@@ -336,8 +315,8 @@ clock()
 service_degradation_label = Label(master, text="Service Degradation", font=("Ariel", 10, "bold"))
 service_degradation_label.place(x=160, y=45)
 service_degradation_variable = StringVar(master)
-service_degradation_variable.set(service_degradation[0])  # default value
-service_degradation_options = OptionMenu(master, service_degradation_variable, *service_degradation)
+service_degradation_variable.set(service_degradation2[0])  # default value
+service_degradation_options = OptionMenu(master, service_degradation_variable, *service_degradation2)
 service_degradation_options.place(x=160, y=65)
 
 # Symptoms
@@ -366,8 +345,8 @@ action_taken.get("1.0", "end-1c")
 root_cause_label = Label(master, text="Root Cause", font=("Ariel", 10, "bold"))
 root_cause_label.place(x=0, y=45)
 root_cause_variable = StringVar(master)
-root_cause_variable.set(root_cause[0])  # default value
-root_cause_options = OptionMenu(master, root_cause_variable, *root_cause)
+root_cause_variable.set(root_cause2[0])  # default value
+root_cause_options = OptionMenu(master, root_cause_variable, *root_cause2)
 root_cause_options.place(x=0, y=65)
 
 
@@ -375,8 +354,8 @@ root_cause_options.place(x=0, y=65)
 comms_manager_label = Label(master, text="Comms Manager", font=("Ariel", 10, "bold"))
 comms_manager_label.place(x=400, y=150)
 comms_manager_variable = StringVar(master)
-comms_manager_variable.set(comms_manager[0])  # default value
-comms_manager_options = OptionMenu(master, comms_manager_variable, *comms_manager)
+comms_manager_variable.set(comms_manager2[0])  # default value
+comms_manager_options = OptionMenu(master, comms_manager_variable, *comms_manager2)
 comms_manager_options.place(x=400, y=170)
 
 # Crisis Manager
@@ -472,8 +451,8 @@ def select_affecting_system():
     listbox = Listbox(splash_window, height=10, selectmode='multiple', yscrollcommand=yscrollbar.set)
     yscrollbar.config(command=listbox.yview)
 
-    for item in affecting_system:
-        listbox.insert(affecting_system.index(item), item)
+    for item in affecting_system2:
+        listbox.insert(affecting_system2.index(item), item)
 
     # Creates the list and label inside the window
     def listbox_used(event):
@@ -529,8 +508,8 @@ def select_operators():
     listbox = Listbox(splash_window, height=10, selectmode='multiple', yscrollcommand=yscrollbar.set)
     yscrollbar.config(command=listbox.yview)
 
-    for item in operator:
-        listbox.insert(operator.index(item), item)
+    for item in operator2:
+        listbox.insert(operator2.index(item), item)
 
     # Creates the list and label inside the window
     def listbox_used(event):
