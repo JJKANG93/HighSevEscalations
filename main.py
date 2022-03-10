@@ -68,7 +68,7 @@ operator = []
 service_degradation = []
 root_cause = []
 comms_manager = []
-with open('config.json') as json_file: #This doesn't
+with open('config.json') as json_file:
     data = json.load(json_file)
     status_list = list(data.values())
     status.append(status_list[0])
@@ -87,46 +87,37 @@ with open('config.json') as json_file: #This doesn't
     comms_manager_list = list(data.values())
     comms_manager.append(comms_manager_list[7])
 
+
 # Create another list for the functions to use
+def lst_generator(lst1, lst2):
+    for x in lst1:
+        for y in x:
+            lst2.append(y)
+
+
 status2 = []
-for x in status:
-    for y in x:
-        status2.append(y)
+lst_generator(status, status2)
 
 severity2 = []
-for x in severity:
-    for y in x:
-        severity2.append(y)
+lst_generator(severity, severity2)
 
 affecting_system2 = []
-for x in affecting_system:
-    for y in x:
-        affecting_system2.append(y)
+lst_generator(affecting_system, affecting_system2)
 
 tier2 = []
-for x in tier:
-    for y in x:
-        tier2.append(y)
-        
+lst_generator(tier, tier2)
+
 operator2 = []
-for x in operator:
-    for y in x:
-        operator2.append(y)
-        
+lst_generator(operator, operator2)
+
 service_degradation2 = []
-for x in service_degradation:
-    for y in x:
-        service_degradation2.append(y)
+lst_generator(service_degradation, service_degradation2)
 
 root_cause2 = []
-for x in root_cause:
-    for y in x:
-        root_cause2.append(y)
+lst_generator(root_cause, root_cause2)
 
 comms_manager2 = []
-for x in comms_manager:
-    for y in x:
-        comms_manager2.append(y)
+lst_generator(comms_manager, comms_manager2)
 
 # Status Dropdown Menu
 status_label = Label(master, text="Status", font=("Ariel", 10, "bold"))
@@ -208,7 +199,8 @@ def time_elapsed(year1, month1, day1, hour1, min1, year2, month2, day2, hour2, m
     elif len(z) == 3 and z[2] and z[2][-2:] == "0":
         return z[0] + "d" + " " + z[2][:-3] + "h"  # gives #d #h
     elif len(z) == 3 and z[2]:
-        return z[0] + "d" + " " + z[2][:-3] + "h" + " " + str(int(z[2][-2:])) + "m"  # gives #d #h #m int func removes leading zero
+        return z[0] + "d" + " " + z[2][:-3] + "h" + " " + str(
+            int(z[2][-2:])) + "m"  # gives #d #h #m int func removes leading zero
 
     # z length of 1 is equal to "hh:mm"
     elif len(z) == 1 and a[1] == "00":
@@ -220,7 +212,7 @@ def time_elapsed(year1, month1, day1, hour1, min1, year2, month2, day2, hour2, m
     else:
         print('no match')
 
-
+# Checks if resolved comms is sent
 def resolved_checker():
     if status_variable.get() == "Resolved" or status_variable.get() == "New/Resolved" or \
             status_variable.get() == "Re-occurring/Resolved":
@@ -327,11 +319,14 @@ symptoms = Text(master, undo=True, wrap=WORD)
 symptoms.insert("3.0", "")
 symptoms.place(x=0, y=470, height=100, width=390)
 
+# Fills in escalation name by default if blank
 def symptoms_checker():
     if symptoms.get('1.0', 'end-1c') == "" or symptoms.get('1.0', 'end-1c') == name.get():
         return name.get()
     else:
         return symptoms.get('1.0', 'end-1c')
+
+
 # Action Taken
 action_taken_label = Label(master, text="Action Taken", font=("Ariel", 10, "bold"))
 action_taken_label.place(x=550, y=0)
@@ -349,7 +344,6 @@ root_cause_variable = StringVar(master)
 root_cause_variable.set(root_cause2[0])  # default value
 root_cause_options = OptionMenu(master, root_cause_variable, *root_cause2)
 root_cause_options.place(x=0, y=65)
-
 
 # Comms Manager
 comms_manager_label = Label(master, text="Comms Manager", font=("Ariel", 10, "bold"))
@@ -369,7 +363,7 @@ crisis_manager_entry_box.place(x=400, y=220, height=25)
 
 
 def crisis_man_checker():
-    if crisis_manager_variable.get().lower() == "comms manager" or crisis_manager_variable.get().lower() == "comms"\
+    if crisis_manager_variable.get().lower() == "comms manager" or crisis_manager_variable.get().lower() == "comms" \
             or crisis_manager_variable.get() == "communication manager" or crisis_manager_variable.get() == "":
         return comms_manager_variable.get()
     else:
@@ -544,7 +538,7 @@ operator_button.place(x=150, y=147)
 op_frame = Frame(master)
 op_frame.place(x=130, y=180)
 
-
+# Prints the fully sent escalation comms
 def print_template():
     global T
     klembord.set_text('Nothing to copy!')
@@ -555,9 +549,9 @@ def print_template():
                             'There was an error! Please check the minimum required fields for an escalation!\n'
                             '發生錯誤! 請確認各欄位!')
     elif time_elapsed(int(sel_date1[0:4]), int(sel_date1[5:7]), int(sel_date1[8:10]),
-                            int(start_time1.get()), int(start_time2.get()), int(sel_date2[0:4]),
-                            int(sel_date2[5:7]), int(sel_date2[8:10]), int(end_time1.get()),
-                            int(end_time2.get())) == 'date error':
+                      int(start_time1.get()), int(start_time2.get()), int(sel_date2[0:4]),
+                      int(sel_date2[5:7]), int(sel_date2[8:10]), int(end_time1.get()),
+                      int(end_time2.get())) == 'date error':
         messagebox.showinfo('Date Error', 'Check the date! \n'
                                           '     確認日期')
     elif items is None or op_items is None or items == [] or op_items == []:
@@ -585,7 +579,7 @@ def print_template():
                 ('tagon', 'bold'): '<b>',
                 ('tagoff', 'bold'): '</b>',
             }
-
+            # Lets you copy and paste bold to HTML editors
             def copy():
                 klembord.set_with_rich_text('Status', f'<b>Status: </b>{status_variable.get()}'
                                                       f'<br><b>Severity: </b>{severity_variable.get()}'
@@ -593,7 +587,7 @@ def print_template():
                                                       f'<br><b>Affecting System: </b>{", ".join(items)}'
                                                       f'<br><b>Tier: </b>{tier_variable.get()}'
                                                       f'<br><b>Operator: </b>{", ".join(op_items)}'
-                                                      f"""<br><b>Time Elapsed:</b> {time_elapsed(int(sel_date1[0:4]), int(sel_date1[5:7]), int(sel_date1[8:10]), int(start_time1.get()), int(start_time2.get()), int(sel_date2[0:4]), int(sel_date2[5:7]), int(sel_date2[8:10]), int(end_time1.get()),int(end_time2.get()))}"""
+                                                      f"""<br><b>Time Elapsed:</b> {time_elapsed(int(sel_date1[0:4]), int(sel_date1[5:7]), int(sel_date1[8:10]), int(start_time1.get()), int(start_time2.get()), int(sel_date2[0:4]), int(sel_date2[5:7]), int(sel_date2[8:10]), int(end_time1.get()), int(end_time2.get()))}"""
                                                       f'<br><b>Start Time: </b>'
                                                       f"""{sel_date1[0:4]}-{sel_date1[5:7]}-{sel_date1[8:10]} {(start_time1.get().rjust(2, '0'))}:{(start_time2.get().rjust(2, '0'))} (GMT+8)"""
                                                       f'<br><b>End Time: </b>{resolved_checker()}'
@@ -609,7 +603,7 @@ def print_template():
                                                       f'<br><b>Customer Ref#: </b>{customer_ref.get()}'
                                                       f'<br>'
                                                       f'<br><b>Join Microsoft Teams Chat: </b>{shortener(bitly_url)}')
-
+            # Shows bold in the print template
             def copy_rich_text(event):
                 try:
                     txt = T.get('sel.first', 'sel.last')
@@ -641,11 +635,12 @@ def print_template():
             T.insert("end", "Time Elapsed: ", "bold")
             T.insert("end",
                      f"""{time_elapsed(int(sel_date1[0:4]), int(sel_date1[5:7]), int(sel_date1[8:10]),
-                            int(start_time1.get()), int(start_time2.get()), int(sel_date2[0:4]), 
-                            int(sel_date2[5:7]), int(sel_date2[8:10]), int(end_time1.get()),
-                            int(end_time2.get()))}\n""")
+                                       int(start_time1.get()), int(start_time2.get()), int(sel_date2[0:4]),
+                                       int(sel_date2[5:7]), int(sel_date2[8:10]), int(end_time1.get()),
+                                       int(end_time2.get()))}\n""")
             T.insert("end", "Start Time: ", "bold")
-            T.insert("end", f"{sel_date1[0:4]}-{sel_date1[5:7]}-{sel_date1[8:10]} {(start_time1.get().rjust(2, '0'))}:{(start_time2.get().rjust(2, '0'))} (GMT+8)\n")
+            T.insert("end",
+                     f"{sel_date1[0:4]}-{sel_date1[5:7]}-{sel_date1[8:10]} {(start_time1.get().rjust(2, '0'))}:{(start_time2.get().rjust(2, '0'))} (GMT+8)\n")
             T.insert("end", "End Time: ", "bold")
             T.insert("end", f"{resolved_checker()}\n")
             T.insert("end", "Service Degradation: ", "bold")
@@ -683,7 +678,7 @@ def print_template():
 
         mainloop()
 
-
+# Big print button
 print_button = Button(master, text="Print", command=lambda: print_template())
 print_button_font = font.Font(size=0, weight='bold')
 print_button['font'] = print_button_font
