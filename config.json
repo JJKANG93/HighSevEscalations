@@ -1,120 +1,26 @@
 {
     "status": [
-        "New",
-        "New/Resolved",
-        "Updated",
-        "Ongoing",
-        "On Hold",
-        "Resolved",
-        "Re-occurring",
-        "Re-occurring/Resolved",
-        "Canceled"
+        ""
     ],
     "severity": [
-        "A",
-        "B"
+        ""
     ],
     "affecting_system": [
-        "all",
-        "Live Dealer",
-        "TNGQuickfire",
-        "MGP SW",
-        "QF2",
-        "Sempris",
-        "TEG0",
-        "TEG1",
-        "TEG2",
-        "TEG3",
-        "TEG4",
-        "TEG6"
+        ""
     ],
     "tier": [
-        "N/A",
-        "Tier_1",
-        "Tier_2"
+        ""
     ],
     "operator": [
-        "all",
-        "-------------------------TEG0----------------------",
-        "Power_Asia",
-        "infini88",
-        "Asia888",
-        "ambtw",
-        "topusd3",
-        "TOP_USD2",
-        "Poseidon",
-        "TH1GAMES",
-        "TOP_USD(GAMA)",
-        "UEG",
-        "inplaymatrix",
-        "GplayG",
-        "-------------------------TEG1----------------------",
-        "GT",
-        "-------------------------TEG2----------------------",
-        "BBIN_CNY",
-        "-------------------------TEG3----------------------",
-        "JuGaming(A)",
-        "-------------------------TEG4----------------------",
-        "JuGamingA(6)",
-        "JuGamingA(12)",
-        "JuGamingA(18)",
-        "JuGamingA(25)",
-        "JuGamingA(28)",
-        "-------------------------TEG6----------------------",
-        "Oriental_Game",
-        "OG",
-        "-------------------------MGP SW--------------------",
-        "AMBSW",
-        "AMBGAMESSW",
-        "pay4dsw",
-        "-------------------------QF1-----------------------",
-        "Sempris",
-        "W88",
-        "Wild_Treasure",
-        "188bet",
-        "Asiabet",
-        "Solid_Gaming",
-        "GSD",
-        "Foxnos",
-        "M88",
-        "Asian_Logic",
-        "VWIN",
-        "-------------------------QF2-----------------------",
-        "SBO"
+        ""
     ],
     "service_degradation": [
-        "N/A",
-        "25%",
-        "Over 25%",
-        "50%",
-        "Over 50%",
-        "75%",
-        "Over 75%",
-        "99%",
-        "100%"
+        ""
     ],
     "root_cause": [
-        "N/A",
-        "Internal",
-        "Operator",
-        "Regular Maintenance",
-        "Network",
-        "Internal-3rd Party",
-        "Internal-MG+",
-        "Unknown"
+        ""
     ],
     "comms_manager": [
-        "Abri Liebenberg (+61 432823087)",
-        "Matt Cheng (+886 932075280)",
-        "Matthew Geoghegan (+886 905249541)",
-        "Bartosz Lewandowski (+886 978705232)",
-        "Jeff Huang (+886 933308768)",
-        "Jill Shen (+886 903438345)",
-        "Frank Hsu (+886 972211756)",
-        "Juan Gilpin (+886 909948943)",
-        "Ran Alkalay",
-        "Arik Klein",
-        "Jamil Saab",
-        "Yaacov Pines"
+        ""
     ]
 }
