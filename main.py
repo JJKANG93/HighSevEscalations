@@ -8,6 +8,8 @@ import time
 from datetime import datetime
 import klembord
 import json
+from jira import JIRA
+
 
 # Main Window
 master = Tk()
@@ -379,12 +381,90 @@ escalated_by_entry_box = Entry(master, textvariable=escalated_by, width=50)
 escalated_by_entry_box.place(x=400, y=270, height=25)
 
 # Clik ID
-clik_id_label = Label(master, text="Clik ID (ITOC PD) SUPL-XXXX", font=("Ariel", 10, "bold"))
+clik_id_label = Label(master, text="Clik ID SUPL-XXXX", font=("Ariel", 10, "bold"))
 clik_id_label.place(x=400, y=300)
 clik_id = StringVar()
 clik_id.set("N/A")
 clik_id_entry_box = Entry(master, textvariable=clik_id, width=50)
 clik_id_entry_box.place(x=400, y=320, height=25)
+
+
+#Jira
+supl_button = Button(master, text="Create SUPL", command=lambda: jira_generator())
+supl_button.place(x=530, y=295)
+
+# Jira Login
+user = ''
+apikey = ''
+server = 'https://asiasupport247.atlassian.net'
+
+options = {
+    'server': server
+}
+jira = JIRA(options, basic_auth=(user, apikey))
+    
+def jira_generator():
+    global single_issue
+    try:
+        if shortener(bitly_url) == "Invalid URL":
+            messagebox.showinfo('Bitly Error', 'Invalid URL\n無效URL')
+        elif sel_date1 is None or sel_date2 is None:
+            messagebox.showinfo('Error',
+                                'There was an error! Please check the minimum required fields for an escalation!\n'
+                                '發生錯誤! 請確認各欄位!')
+        elif time_elapsed(int(sel_date1[0:4]), int(sel_date1[5:7]), int(sel_date1[8:10]),
+                          int(start_time1.get()), int(start_time2.get()), int(sel_date2[0:4]),
+                          int(sel_date2[5:7]), int(sel_date2[8:10]), int(end_time1.get()),
+                          int(end_time2.get())) == 'date error':
+            messagebox.showinfo('Date Error', 'Check the date! \n'
+                                              '     確認日期')
+        elif items is None or op_items is None or items == [] or op_items == []:
+            messagebox.showinfo('Error',
+                                'There was an error! Please check the minimum required fields for an escalation!\n'
+                                '發生錯誤! 請確認各欄位!')
+        else:
+            issue_dict = {
+                'project': {'id': 10057},  # TSB project ID
+                'summary': name.get(),
+                'description': f'Status: {status_variable.get()}\n'
+                               f'Severity: {severity_variable.get()}\n'
+                               f'Name: {name.get()}\n'
+                               f'Affecting System: {", ".join(items)}\n'
+                               f'Tier: {tier_variable.get()}\n'
+                               f'Operator: {", ".join(op_items)}\n'
+                               f"""Time Elapsed: {time_elapsed(int(sel_date1[0:4]), int(sel_date1[5:7]), int(sel_date1[8:10]), int(start_time1.get()), int(start_time2.get()), int(sel_date2[0:4]), int(sel_date2[5:7]), int(sel_date2[8:10]), int(end_time1.get()), int(end_time2.get()))}\n"""
+                               f'Start Time: '
+                               f"""{sel_date1[0:4]}-{sel_date1[5:7]}-{sel_date1[8:10]} {(start_time1.get().rjust(2, '0'))}:{(start_time2.get().rjust(2, '0'))} (GMT+8)\n"""
+                               f'End Time: {resolved_checker()}\n'
+                               f'Service Degradation: {service_degradation_variable.get()}\n'
+                               f'Symptoms: {symptoms_checker()}\n'
+                               f'Action Taken: {action_taken.get("1.0", "end-1c")}\n'
+                               f'Root Cause: {root_cause_variable.get()}\n'
+                               f'Comms Manager: {comms_manager_variable.get()}\n'
+                               f'Crisis Manager: {crisis_man_checker()}\n'
+                               f'Escalated by: {escalated_by.get()}\n'
+                               f'\n\n'
+                               f'Clik ID: {clik_id.get()}\n'
+                               f'Customer Ref#: {customer_ref.get()}\n'
+                               f'\n\n'
+                               f'Join Microsoft Teams Chat: {shortener(bitly_url)}',
+                'issuetype': {'name': 'Task'},  # Issue Type
+
+            }
+            new_issue = jira.create_issue(fields=issue_dict)
+            single_issue = jira.issue(new_issue.key)
+            root = Tk()
+            T = Text(root, font='Ariel 10', height=5, width=30, undo=True)
+            T.pack()
+            T.insert("end", "Ticket created successfully!\n\n" + str(single_issue))
+            return f'{single_issue}'
+    except TypeError:
+        messagebox.showinfo('Error', 'Please fill out the escalation fields first.\n'
+                                     '發生錯誤! 請確認各欄位.')
+    except ValueError:
+        messagebox.showinfo('Error', 'Please fill out the escalation fields first.\n'
+                                     '發生錯誤! 請確認各欄位.')
+
 
 # Customer Ref
 customer_ref_label = Label(master, text="Customer Ref# (AS Jira) SUPL-XXXX", font=("Ariel", 10, "bold"))
@@ -542,24 +622,24 @@ op_frame.place(x=130, y=180)
 def print_template():
     global T
     klembord.set_text('Nothing to copy!')
-    if shortener(bitly_url) == "Invalid URL":
-        messagebox.showinfo('Bitly Error', 'Invalid URL\n無效URL')
-    elif sel_date1 is None or sel_date2 is None:
-        messagebox.showinfo('Error',
-                            'There was an error! Please check the minimum required fields for an escalation!\n'
-                            '發生錯誤! 請確認各欄位!')
-    elif time_elapsed(int(sel_date1[0:4]), int(sel_date1[5:7]), int(sel_date1[8:10]),
-                      int(start_time1.get()), int(start_time2.get()), int(sel_date2[0:4]),
-                      int(sel_date2[5:7]), int(sel_date2[8:10]), int(end_time1.get()),
-                      int(end_time2.get())) == 'date error':
-        messagebox.showinfo('Date Error', 'Check the date! \n'
-                                          '     確認日期')
-    elif items is None or op_items is None or items == [] or op_items == []:
-        messagebox.showinfo('Error',
-                            'There was an error! Please check the minimum required fields for an escalation!\n'
-                            '發生錯誤! 請確認各欄位!')
-    else:
-        try:
+    try:
+        if shortener(bitly_url) == "Invalid URL":
+            messagebox.showinfo('Bitly Error', 'Invalid URL\n無效URL')
+        elif sel_date1 is None or sel_date2 is None:
+            messagebox.showinfo('Error',
+                                'There was an error! Please check the minimum required fields for an escalation!\n'
+                                '發生錯誤! 請確認各欄位!')
+        elif time_elapsed(int(sel_date1[0:4]), int(sel_date1[5:7]), int(sel_date1[8:10]),
+                          int(start_time1.get()), int(start_time2.get()), int(sel_date2[0:4]),
+                          int(sel_date2[5:7]), int(sel_date2[8:10]), int(end_time1.get()),
+                          int(end_time2.get())) == 'date error':
+            messagebox.showinfo('Date Error', 'Check the date! \n'
+                                              '     確認日期')
+        elif items is None or op_items is None or items == [] or op_items == []:
+            messagebox.showinfo('Error',
+                                'There was an error! Please check the minimum required fields for an escalation!\n'
+                                '發生錯誤! 請確認各欄位!')
+        else:
             root = Tk()
             root.title("High Sev Escalation")
             T = Text(root, font='Ariel 10', height=25, width=80, undo=True)
@@ -664,19 +744,16 @@ def print_template():
             T.insert("end", "Join Microsoft Teams Chat: ", "bold")
             T.insert("end", f"{shortener(bitly_url)}")
 
-        # Backup Errors
-        except NameError:
-            T.insert(END, "\n\n\t\t\t\tThere was an error! "
-                          "\n\t\tPlease check the minimum required fields for an escalation."
-                          " \n \t\t\t        發生錯誤! 請確認各欄位.")
-            pass
-        except ValueError:
-            T.insert(END, "\n\n\t\t\t\tThere was an error!"
-                          " \n\t\tPlease check the minimum required fields for an escalation."
-                          " \n \t\t\t        發生錯誤! 請確認各欄位.")
-            pass
+    # Backup Errors
+    except NameError:
+        messagebox.showinfo('Error', 'Please fill out the escalation fields first.\n'
+                                     '發生錯誤! 請確認各欄位.')
+        pass
+    except ValueError:
+        messagebox.showinfo('Error', 'Please fill out the escalation fields first.\n'
+                                     '發生錯誤! 請確認各欄位.')
 
-        mainloop()
+    mainloop()
 
 # Big print button
 print_button = Button(master, text="Print", command=lambda: print_template())
