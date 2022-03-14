@@ -10,7 +10,6 @@ import klembord
 import json
 from jira import JIRA
 
-
 # Main Window
 master = Tk()
 app_width = 800
@@ -72,20 +71,28 @@ root_cause = []
 comms_manager = []
 with open('config.json') as json_file:
     data = json.load(json_file)
+
     status_list = list(data.values())
     status.append(status_list[0])
+
     severity_list = list(data.values())
     severity.append(severity_list[1])
+
     affecting_system_list = list(data.values())
     affecting_system.append(affecting_system_list[2])
+
     tier_list = list(data.values())
     tier.append(tier_list[3])
+
     operator_list = list(data.values())
     operator.append(operator_list[4])
+
     service_degradation_list = list(data.values())
     service_degradation.append(service_degradation_list[5])
+
     root_cause_list = list(data.values())
     root_cause.append(root_cause_list[6])
+
     comms_manager_list = list(data.values())
     comms_manager.append(comms_manager_list[7])
 
@@ -214,6 +221,7 @@ def time_elapsed(year1, month1, day1, hour1, min1, year2, month2, day2, hour2, m
     else:
         print('no match')
 
+
 # Checks if resolved comms is sent
 def resolved_checker():
     if status_variable.get() == "Resolved" or status_variable.get() == "New/Resolved" or \
@@ -321,6 +329,7 @@ symptoms = Text(master, undo=True, wrap=WORD)
 symptoms.insert("3.0", "")
 symptoms.place(x=0, y=470, height=100, width=390)
 
+
 # Fills in escalation name by default if blank
 def symptoms_checker():
     if symptoms.get('1.0', 'end-1c') == "" or symptoms.get('1.0', 'end-1c') == name.get():
@@ -376,33 +385,33 @@ def crisis_man_checker():
 escalated_by_label = Label(master, text="Escalated by:", font=("Ariel", 10, "bold"))
 escalated_by_label.place(x=400, y=250)
 escalated_by = StringVar()
-escalated_by.set("XXXX (+886 226 560 700 ext 207)")
+escalated_by.set(str(list(data.values())[11]))
 escalated_by_entry_box = Entry(master, textvariable=escalated_by, width=50)
 escalated_by_entry_box.place(x=400, y=270, height=25)
 
 # Clik ID
 clik_id_label = Label(master, text="Clik ID SUPL-XXXX", font=("Ariel", 10, "bold"))
-clik_id_label.place(x=400, y=300)
+clik_id_label.place(x=460, y=300)
 clik_id = StringVar()
 clik_id.set("N/A")
-clik_id_entry_box = Entry(master, textvariable=clik_id, width=50)
-clik_id_entry_box.place(x=400, y=320, height=25)
+clik_id_entry_box = Entry(master, textvariable=clik_id, width=40)
+clik_id_entry_box.place(x=460, y=320, height=25)
 
+# Jira
+supl_button = Button(master, text="Create \nSUPL", command=lambda: jira_generator())
+supl_button.place(x=400, y=305)
 
-#Jira
-supl_button = Button(master, text="Create SUPL", command=lambda: jira_generator())
-supl_button.place(x=530, y=295)
-
-# Jira Login
-user = ''
-apikey = ''
-server = 'https://asiasupport247.atlassian.net'
+# Jira Login from config file
+user = str(list(data.values())[8])
+apikey = str(list(data.values())[9])
+server = str(list(data.values())[10])
 
 options = {
     'server': server
 }
 jira = JIRA(options, basic_auth=(user, apikey))
-    
+
+
 def jira_generator():
     global single_issue
     try:
@@ -424,7 +433,7 @@ def jira_generator():
                                 '發生錯誤! 請確認各欄位!')
         else:
             issue_dict = {
-                'project': {'id': 10057},  # TSB project ID
+                'project': {'id': 10002},  # TSB project ID
                 'summary': name.get(),
                 'description': f'Status: {status_variable.get()}\n'
                                f'Severity: {severity_variable.get()}\n'
@@ -448,15 +457,18 @@ def jira_generator():
                                f'Customer Ref#: {customer_ref.get()}\n'
                                f'\n\n'
                                f'Join Microsoft Teams Chat: {shortener(bitly_url)}',
-                'issuetype': {'name': 'Task'},  # Issue Type
-
+                'issuetype': {'name': 'MG+ Support Ticket'},
+                'customfield_10053': {'value': 'Alert'},  # Call Type
+                'components': [{"name": "General Failure"}],  # Components
+                'customfield_10051': {'value': 'K2'},  # Provider
+                'customfield_10037': {'value': 'K2'},  # Head Office
             }
             new_issue = jira.create_issue(fields=issue_dict)
             single_issue = jira.issue(new_issue.key)
             root = Tk()
-            T = Text(root, font='Ariel 10', height=5, width=30, undo=True)
+            T = Text(root, font='Ariel 10', height=15, width=35, undo=True, wrap=WORD)
             T.pack()
-            T.insert("end", "Ticket created successfully!\n\n" + str(single_issue))
+            T.insert("end", "Ticket created successfully!\n\n" + str(single_issue) + "\n\nhttps://asiasupport247.atlassian.net/browse/" + str(single_issue))
             return f'{single_issue}'
     except TypeError:
         messagebox.showinfo('Error', 'Please fill out the escalation fields first.\n'
@@ -618,6 +630,7 @@ operator_button.place(x=150, y=147)
 op_frame = Frame(master)
 op_frame.place(x=130, y=180)
 
+
 # Prints the fully sent escalation comms
 def print_template():
     global T
@@ -659,6 +672,7 @@ def print_template():
                 ('tagon', 'bold'): '<b>',
                 ('tagoff', 'bold'): '</b>',
             }
+
             # Lets you copy and paste bold to HTML editors
             def copy():
                 klembord.set_with_rich_text('Status', f'<b>Status: </b>{status_variable.get()}'
@@ -683,6 +697,7 @@ def print_template():
                                                       f'<br><b>Customer Ref#: </b>{customer_ref.get()}'
                                                       f'<br>'
                                                       f'<br><b>Join Microsoft Teams Chat: </b>{shortener(bitly_url)}')
+
             # Shows bold in the print template
             def copy_rich_text(event):
                 try:
@@ -736,7 +751,7 @@ def print_template():
             T.insert("end", "Crisis Manager: ", "bold")
             T.insert("end", f"{crisis_man_checker()}\n")
             T.insert("end", "Escalated by: ", "bold")
-            T.insert("end", f" {escalated_by.get()}\n\n")
+            T.insert("end", f"{escalated_by.get()}\n\n")
             T.insert("end", "Clik ID: ", "bold")
             T.insert("end", f"{clik_id.get()}\n")
             T.insert("end", "Customer Ref#: ", "bold")
@@ -754,6 +769,7 @@ def print_template():
                                      '發生錯誤! 請確認各欄位.')
 
     mainloop()
+
 
 # Big print button
 print_button = Button(master, text="Print", command=lambda: print_template())
