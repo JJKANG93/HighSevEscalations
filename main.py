@@ -1,5 +1,5 @@
 from tkinter import CENTER, Tk, Label, StringVar, OptionMenu, Entry, Text, Scrollbar, RIGHT, Y, Listbox, YES, Button, \
-    mainloop, END, Frame, messagebox, TclError, WORD, Menu, font
+    mainloop, END, Frame, messagebox, TclError, WORD, Menu, font, Toplevel, messagebox
 from tkcalendar import Calendar
 import bitlyshortener
 from bitlyshortener.exc import RequestError, ArgsError, ShortenerError
@@ -12,12 +12,14 @@ from jira import JIRA, JIRAError
 import psutil
 
 
+
 # Updated History
 # 2022/10/28 新增多系統百分比附加, 簡易計算百分比
 # 2022/11/09 多import一個模組JIRAError
 # 2022/11/09 修復Create Jira ticket. 新增顯示Jira 錯誤訊息
 # 2023/03/31 修改Action Taken的內容可在json檔新增修改
-
+# 2023/05/28 增加效能检查psutil，倒数计时按钮
+# 2023/06/02 改善倒计时按钮
 
 # Main Window
 master = Tk()
@@ -83,7 +85,7 @@ root_cause = []
 comms_manager = []
 action_taken_text = []
 
-with open('config.json') as json_file:
+with open('config.json','r') as json_file:
     data = json.load(json_file)
 
     status_list = list(data.values())
@@ -378,30 +380,19 @@ update_memory_usage()
 def clock():
     hour = time.strftime("%H")
     minute = time.strftime("%M")
-    second = time.strftime("%S")
+   # second = time.strftime("%S")
 
     clock_label = Label(master)
     clock_label.place(x=0, y=300)
-    clock_label.config(text="Current Time (GMT+8): \n" + hour + ":" + minute + ":" + second,
+    clock_label.config(text="Current Time (GMT+8): \n" + hour + ":" + minute,
                        justify="left", font=("Ariel", 10, "bold"))
-    clock_label.after(1000, clock)
+    # with seconds
+    # clock_label.config(text="Current Time (GMT+8): \n" + hour + ":" + minute + ":" + second,
+    #                    justify="left", font=("Ariel", 10, "bold"))
+    clock_label.after(60000, clock) #change to update every one minute.
 
 
 clock()
-
-def countdown(seconds):
-    time_label = Label()
-    if seconds >= 0:
-        time_label.config(text=f"Time remaining: {seconds} seconds")
-        seconds -= 1
-        time_label.after(1000, countdown, seconds)
-    else:
-        time_label.config(text="Time's up!")
-
-    time_label.place(x=400, y=570)
- #   time_label.config(text=f"Memory usage: {memory_usage_readable} ")
-#    time_label.after(10, update_memory_usage)
-
 
 # Service Degradation
 service_degradation_label = Label(
@@ -1019,10 +1010,31 @@ print_button['font'] = print_button_font
 print_button.config(height=2, width=10)
 print_button.place(x=600, y=500)
 
-print_button = Button(master, text="Time", command=lambda: countdown(10))
-print_button_font = font.Font(size=0, weight='bold')
-print_button['font'] = print_button_font
-print_button.config(height=2, width=10)
-print_button.place(x=420, y=500)
+
+# Count down Button
+countdown_button = Button(master, text="Countdown", command=lambda: countdown2())
+countdown_button_font = font.Font(size=0, weight='bold')
+countdown_button['font'] = countdown_button_font
+countdown_button.config(height=2, width=10)
+countdown_button.place(x=420, y=500)
+
+def countdown2():
+    if severity_variable.get() == "A":
+        seconds = 1 * 60
+    else:
+        seconds = 2 * 60
+
+    def decrement_time():
+        nonlocal seconds
+        if seconds > 0:
+            minutes, secs = divmod(seconds, 60)
+            time_string = "{:02d}:{:02d}".format(minutes, secs)
+            countdown_button.config(text=time_string)
+            seconds -= 1
+            current_job = master.after(1000, decrement_time)
+        else:
+            messagebox.showinfo("Time's Up!", "Please draft a updated comms")
+
+    decrement_time()
 
 mainloop()
