@@ -1,5 +1,5 @@
 from tkinter import CENTER, Tk, Label, StringVar, OptionMenu, Entry, Text, Scrollbar, RIGHT, Y, Listbox, YES, Button, \
-    mainloop, END, Frame, messagebox, TclError, WORD, Menu, font, Toplevel, messagebox
+    mainloop, END, Frame, messagebox, TclError, WORD, Menu, font
 from tkcalendar import Calendar
 import bitlyshortener
 from bitlyshortener.exc import RequestError, ArgsError, ShortenerError
@@ -11,16 +11,15 @@ import json
 from jira import JIRA, JIRAError
 import psutil
 
-
-
 # Updated History
 # 2022/10/28 新增多系統百分比附加, 簡易計算百分比
 # 2022/11/09 多import一個模組JIRAError
 # 2022/11/09 修復Create Jira ticket. 新增顯示Jira 錯誤訊息
 # 2023/03/31 修改Action Taken的內容可在json檔新增修改
-# 2023/05/28 增加效能检查psutil，倒数计时按钮
-# 2023/06/02 改善倒计时按钮
-#
+# 2023/04/09 新增：Clik ID自動填入、時間日期帶入APP開啟時間、取得當下時間按鈕
+# 2023/04/09 移除：持續顯示當下時間，降低佔用資源
+# 2023/05/28 增加效能检查psutil
+# 2023/06/02 增加倒计时按钮
 
 # Main Window
 master = Tk()
@@ -86,7 +85,10 @@ root_cause = []
 comms_manager = []
 action_taken_text = []
 
-with open('config.json','r') as json_file:
+
+with open('../../Downloads/config.json', 'r', encoding='utf-8') as json_file:
+    # with open(r'C:\Users\joyh\OneDrive - Luanta\App\config.json', 'r', encoding='utf-8') as json_file:
+    # with open(r'C:\Users\joyh\OneDrive - Luanta\App\config.json') as json_file:
     data = json.load(json_file)
 
     status_list = list(data.values())
@@ -203,22 +205,39 @@ def click_clear_entry4(event):
     end_time_entry_box2.delete(0, "end")
     return None
 
+# Get Current Time
 
-    # Start Hour 1
+
+sel_date1 = datetime.now().date().strftime("%Y-%m-%d")
+
+sel_date2 = datetime.now().date().strftime("%Y-%m-%d")
+
+
+def update_time():
+    # E_now = datetime.now()
+    # E_hour = E_now.hour
+    # E_minute = E_now.minute
+    end_time1.set("{:02d}".format(datetime.now().hour))
+    end_time2.set("{:02d}".format(datetime.now().minute))
+    global sel_date2
+    sel_date2 = datetime.now().date().strftime("%Y-%m-%d")
+    cal_label2.config(text=sel_date2)
+
+
+# Start Hour 1
 start_time_label = Label(
     master, text="Start Time (GMT+8):", font=("Ariel", 10, "bold"))
 start_time_label.place(x=65, y=340)
 start_time1 = StringVar()
-start_time1.set("HH")
+start_time1.set("{:02d}".format(datetime.now().hour))
 start_time_entry_box1 = Entry(
     master, textvariable=start_time1, width=4, justify='center')
 start_time_entry_box1.bind("<Button-1>", click_clear_entry1)
-# start_time_entry_box1.pack()
 start_time_entry_box1.place(x=65, y=365, height=25)
 
 # Start Hour 2
 start_time2 = StringVar()
-start_time2.set("MM")
+start_time2.set("{:02d}".format(datetime.now().minute))
 start_time_entry_box2 = Entry(
     master, textvariable=start_time2, width=4, justify='center')
 start_time_entry_box2.bind("<Button-1>", click_clear_entry2)
@@ -229,7 +248,7 @@ end_time_label = Label(
     master, text="Now/End Time (GMT+8):", font=("Ariel", 10, "bold"))
 end_time_label.place(x=65, y=400)
 end_time1 = StringVar()
-end_time1.set("HH")
+end_time1.set("{:02d}".format(datetime.now().hour))
 end_time_entry_box1 = Entry(
     master, textvariable=end_time1, width=4, justify='center')
 end_time_entry_box1.bind("<Button-1>", click_clear_entry3)
@@ -237,7 +256,7 @@ end_time_entry_box1.place(x=65, y=425, height=25)
 
 # End Hour 2
 end_time2 = StringVar()
-end_time2.set("MM")
+end_time2.set("{:02d}".format(datetime.now().minute))
 end_time_entry_box2 = Entry(
     master, textvariable=end_time2, width=4, justify='center')
 end_time_entry_box2.bind("<Button-1>", click_clear_entry4)
@@ -294,11 +313,6 @@ def resolved_checker():
         return "N/A"
 
 
-sel_date1 = None
-
-sel_date2 = None
-
-
 # Calendar1
 def get_date1():
     splash_window = Tk()
@@ -326,7 +340,7 @@ def get_date1():
 button = Button(master, text="Start Date", command=lambda: get_date1())
 button.place(x=0, y=340)
 
-cal_label1 = Label(master, text="")
+cal_label1 = Label(master, text=sel_date1)
 cal_label1.place(x=0, y=369)
 
 
@@ -357,43 +371,9 @@ def get_date2():
 button = Button(master, text="End Date", command=lambda: get_date2())
 button.place(x=0, y=400)
 
-cal_label2 = Label(master, text="")
+cal_label2 = Label(master, text=sel_date2)
 cal_label2.place(x=0, y=430)
 
-#Monitor memory usage
-def update_memory_usage():
-    pid = psutil.Process().pid
-    process = psutil.Process(pid)
-    memory_info = process.memory_info()
-    memory_usage = memory_info.rss
-    memory_usage_readable = psutil._common.bytes2human(memory_usage)
-    update_memory_usage_label = Label(
-    master, text=f"Memory usage: {memory_usage_readable} ", font=("Ariel", 10, "bold"))
-    update_memory_usage_label.place(x=600, y=570)
-    update_memory_usage_label.config(text=f"Memory usage: {memory_usage_readable} ")
-    update_memory_usage_label.after(1000, update_memory_usage)
-
-update_memory_usage()
-
-
-
-# Show Current Time
-def clock():
-    hour = time.strftime("%H")
-    minute = time.strftime("%M")
-   # second = time.strftime("%S")
-
-    clock_label = Label(master)
-    clock_label.place(x=0, y=300)
-    clock_label.config(text="Current Time (GMT+8): \n" + hour + ":" + minute,
-                       justify="left", font=("Ariel", 10, "bold"))
-    # with seconds
-    # clock_label.config(text="Current Time (GMT+8): \n" + hour + ":" + minute + ":" + second,
-    #                    justify="left", font=("Ariel", 10, "bold"))
-    clock_label.after(60000, clock) #change to update every one minute.
-
-
-clock()
 
 # Service Degradation
 service_degradation_label = Label(
@@ -420,6 +400,8 @@ s9 = Entry(master, width=4, justify='center')
 s10 = Entry(master, width=4, justify='center')
 s11 = Entry(master, width=4, justify='center')
 s12 = Entry(master, width=4, justify='center')
+
+all_degradation = []
 
 
 def showPercent():
@@ -453,25 +435,37 @@ s12.place(x=310, y=85)
 
 
 # Degradation Calculation %
+def select_all(event):
+    cal_degradation_entry_box1.select_range(0, 'end')  # 選取所有文字
+    cal_degradation_entry_box2.select_range(0, 'end')
+    return 'break'
+
+
 cal_degradation_label = Label(
     master, text="Percent Calculation %", font=("Ariel", 10, "bold"))
-cal_degradation_label.place(x=200, y=300)
+cal_degradation_label.place(x=0, y=300)
 
 cal_degradation1 = StringVar()
 cal_degradation1.set("NN")
 cal_degradation_entry_box1 = Entry(
     master, textvariable=cal_degradation1, width=4, justify='center')
-cal_degradation_entry_box1.place(x=240, y=320, height=20)
+cal_degradation_entry_box1.place(x=0, y=320, height=20)
 
 cal_degradation2 = StringVar()
 cal_degradation2.set("NN")
 cal_degradation_entry_box2 = Entry(
     master, textvariable=cal_degradation2, width=4, justify='center')
-cal_degradation_entry_box2.place(x=280, y=320, height=20)
+cal_degradation_entry_box2.place(x=40, y=320, height=20)
+
+cal_degradation_entry_box1.bind('<FocusIn>', select_all)
+cal_degradation_entry_box2.bind('<FocusIn>', select_all)
+
 
 cal_P = Button(master, text="Calculator",
                command=lambda: degradationP())
-cal_P.place(x=240, y=340, height=20)
+cal_P_font = font.Font(size=0, weight='bold')
+cal_P['font'] = cal_P_font
+cal_P.place(x=80, y=320, height=20)
 
 PercentE = StringVar()
 
@@ -513,8 +507,8 @@ def degradationP():
                 "Ariel", 10, "bold"), fg="black")
             pp = Label(master, text="%", font=(
                 "Ariel", 10, "bold"), fg="black")
-    Presult.place(x=310, y=320, height=20)
-    pp.place(x=330, y=320, height=20)
+    Presult.place(x=180, y=320, height=20)
+    pp.place(x=200, y=320, height=20)
 
 
 # Symptoms
@@ -669,6 +663,7 @@ def jira_generator():
             }
             new_issue = jira.create_issue(fields=issue_dict)
             single_issue = jira.issue(new_issue.key)
+            clik_id.set(str(single_issue))
             root = Tk()
             T = Text(root, font='Ariel 10', height=15,
                      width=35, undo=True, wrap=WORD)
@@ -1004,13 +999,20 @@ def print_template():
     mainloop()
 
 
+# Get Current Time Button
+gettime_button = Button(master, text="Get Time", command=lambda: update_time())
+gettime_button_font = font.Font(size=0, weight='bold')
+gettime_button['font'] = gettime_button_font
+gettime_button.config(height=2, width=10)
+gettime_button.place(x=135, y=425, height=25)
+
+
 # Big print button
 print_button = Button(master, text="Print", command=lambda: print_template())
 print_button_font = font.Font(size=0, weight='bold')
 print_button['font'] = print_button_font
 print_button.config(height=2, width=10)
 print_button.place(x=600, y=500)
-
 
 # Count down Button
 countdown_button = Button(master, text="Countdown", command=lambda: countdown2())
@@ -1026,9 +1028,9 @@ def countdown2():
     if current_job: #check if theres a running countdown
         master.after_cancel(current_job) #reset status
     if severity_variable.get() == "A":
-        seconds = 1 * 60
+        seconds = 30 * 60
     else:
-        seconds = 2 * 60
+        seconds = 60 * 60
 
     def decrement_time():
         global current_job
@@ -1045,5 +1047,20 @@ def countdown2():
 
     decrement_time()
 
-mainloop()
+#Monitor memory usage
+def update_memory_usage():
+    pid = psutil.Process().pid
+    process = psutil.Process(pid)
+    memory_info = process.memory_info()
+    memory_usage = memory_info.rss
+    memory_usage_readable = psutil._common.bytes2human(memory_usage)
+    update_memory_usage_label = Label(
+    master, text=f"Memory usage: {memory_usage_readable} ", font=("Ariel", 10, "bold"))
+    update_memory_usage_label.place(x=600, y=570)
+    update_memory_usage_label.config(text=f"Memory usage: {memory_usage_readable} ")
+    update_memory_usage_label.after(60000, update_memory_usage)
 
+update_memory_usage()
+
+
+mainloop()
