@@ -20,6 +20,7 @@ import psutil
 # 2023/03/31 修改Action Taken的內容可在json檔新增修改
 # 2023/05/28 增加效能检查psutil，倒数计时按钮
 # 2023/06/02 改善倒计时按钮
+#
 
 # Main Window
 master = Tk()
@@ -1018,13 +1019,19 @@ countdown_button['font'] = countdown_button_font
 countdown_button.config(height=2, width=10)
 countdown_button.place(x=420, y=500)
 
+current_job = None
 def countdown2():
+    global current_job
+
+    if current_job: #check if theres a running countdown
+        master.after_cancel(current_job) #reset status
     if severity_variable.get() == "A":
         seconds = 1 * 60
     else:
         seconds = 2 * 60
 
     def decrement_time():
+        global current_job
         nonlocal seconds
         if seconds > 0:
             minutes, secs = divmod(seconds, 60)
@@ -1033,8 +1040,10 @@ def countdown2():
             seconds -= 1
             current_job = master.after(1000, decrement_time)
         else:
+
             messagebox.showinfo("Time's Up!", "Please draft a updated comms")
 
     decrement_time()
 
 mainloop()
+
