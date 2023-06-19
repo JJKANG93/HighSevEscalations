@@ -4,12 +4,12 @@ from tkcalendar import Calendar
 import bitlyshortener
 from bitlyshortener.exc import RequestError, ArgsError, ShortenerError
 import re
-import time
 from datetime import datetime
 import klembord
 import json
 from jira import JIRA, JIRAError
 import psutil
+# import smtplib
 
 # Updated History
 # 2022/10/28 新增多系統百分比附加, 簡易計算百分比
@@ -20,6 +20,7 @@ import psutil
 # 2023/04/09 移除：持續顯示當下時間，降低佔用資源
 # 2023/05/28 增加效能检查psutil
 # 2023/06/02 增加倒计时按钮
+# 2023/06/13 Bring to front when countdown ends + trigger PD(Hidden)
 
 # Main Window
 master = Tk()
@@ -31,7 +32,7 @@ x = (screen_width / 2) - (app_width / 2)
 y = (screen_height / 2) - (app_height / 2)
 # main window start in the center of the screen
 master.geometry(f'{app_width}x{app_height}+{int(x)}+{int(y)}')
-master.title('High Severity Escalation App --Version 8.3')
+master.title('High Severity Escalation App --Version 8.4')
 
 
 # File Menu
@@ -44,20 +45,20 @@ def help():
     splash_window.winfo_screenheight()
     login_width = 300
     login_height = 300
-    x = (screen_width / 2) - (login_width / 2)
-    y = (screen_height / 2) - (login_height / 2)
+    x = (screen_width /2) - (login_width /2)
+    y = (screen_height /2 ) - (login_height /2)
     splash_window.geometry(f'{login_width}x{login_height}+{int(x)}+{int(y)}')
 
     yscrollbar = Scrollbar(splash_window)
     yscrollbar.pack(side=RIGHT, fill=Y)
-    help_box = Text(splash_window, height=25, width=80, undo=True, wrap=WORD)
+    help_box = Text(splash_window, height=120, width=300, undo=True, wrap=WORD)
     help_box.insert("end", "Help\n\n"
                            "1. Time Elapsed is automatically calculated. You just need to fill in the 'Now' time. "
                            "Only resolved escalations will have End Time printed. Time Elapsed 是自動計算的. "
                            "只需要填寫“現在”時間. 只有Resolved才會打印 End Time\n\n"
                            "2. You need to use the Copy button on the print page to copy the bold. You can only copy "
                            "to HTML editors. 您需要使用打印頁面上的複制按鈕來複製粗體. 您只能複製到 HTML 編輯器.\n\n"
-                           "3. Bitly API can only do 100 free URLs a month."
+                           "3. Bitly API can only do 10 free URLs a month."
                            " You can login to Bitly with our own account. Bitly API 每月只能做 100 個免費 UR."
                            " 您可以使用我們自己的帳戶登錄 Bitly.\n\n"
                            "4. Symptoms will default to escalation name if left blank.如果留空，"
@@ -86,7 +87,7 @@ comms_manager = []
 action_taken_text = []
 
 
-with open('../../Downloads/config.json', 'r', encoding='utf-8') as json_file:
+with open('config.json', 'r', encoding='utf-8') as json_file:
     # with open(r'C:\Users\joyh\OneDrive - Luanta\App\config.json', 'r', encoding='utf-8') as json_file:
     # with open(r'C:\Users\joyh\OneDrive - Luanta\App\config.json') as json_file:
     data = json.load(json_file)
@@ -574,8 +575,7 @@ def crisis_man_checker():
 
 
 # Escalated by
-escalated_by_label = Label(
-    master, text="Escalated by:", font=("Ariel", 10, "bold"))
+escalated_by_label = Label(master, text="Escalated by:", font=("Ariel", 10, "bold"))
 escalated_by_label.place(x=400, y=250)
 escalated_by = StringVar()
 escalated_by.set(str(list(data.values())[12]))
@@ -841,10 +841,8 @@ def select_operators():
 
     splash_window.mainloop()
 
-
 # Operator Buttons
-operator_button = Button(master, text="Operators:",
-                         command=lambda: select_operators())
+operator_button = Button(master, text="Operators:",command=lambda: select_operators())
 operator_button.place(x=150, y=147)
 
 # Operator Frame
@@ -884,7 +882,7 @@ def print_template():
             note = Label(
                 root, text="Note: Can only copy bold text to an HTML editor.")
             l.config(font=("Courier", 14))
-            b2 = Button(root, text="Exit", command=root.destroy)
+            b2 = Button(root, text="Exit",command=root.destroy )
             clipboard_button = Button(
                 root, text="Copy Text", command=lambda: copy())
             l.pack()
@@ -1006,9 +1004,8 @@ gettime_button['font'] = gettime_button_font
 gettime_button.config(height=2, width=10)
 gettime_button.place(x=135, y=425, height=25)
 
-
 # Big print button
-print_button = Button(master, text="Print", command=lambda: print_template())
+print_button = Button(master, text="Print", command=lambda: printandcount())
 print_button_font = font.Font(size=0, weight='bold')
 print_button['font'] = print_button_font
 print_button.config(height=2, width=10)
@@ -1042,10 +1039,46 @@ def countdown2():
             seconds -= 1
             current_job = master.after(1000, decrement_time)
         else:
-
+            # send_email()
+            master.attributes("-topmost", True)
+            master.attributes("-topmost", False)
             messagebox.showinfo("Time's Up!", "Please draft a updated comms")
 
     decrement_time()
+
+def printandcount():
+    global current_job
+    countdown2()
+    print_template()
+    current_job = None
+
+# def send_email():
+#     # Set up the SMTP connection
+#     try:
+#         smtp = smtplib.SMTP("smtp.gmail.com", 587)  # Replace with your SMTP server and port
+#         smtp.starttls()
+#         smtp.login("itoperationcentre247@gmail.com","muxzrtysritzoiit")  # Replace with your email and password
+#     except smtplib.SMTPException as e:
+#         messagebox.showerror("Error", f"Failed to establish SMTP connection: {e}")
+#         return
+#
+#     # Create the email message
+#     recipient = "it-operations-centre-email@bigasia.pagerduty.com"  # Replace with the recipient's email address
+#     subject = "Please prepare a updated comms for " + clik_id.get()
+#     message = name.get()
+#
+#     email_message = f"Subject: {subject}\n\n{message}"
+#
+#     # Send the email
+#     try:
+#         smtp.sendmail("itoperationcentre247@gmail.com", recipient, email_message)  # Replace with your email
+#         messagebox.showinfo("Success", "Email sent successfully!")
+#     except smtplib.SMTPException as e:
+#         messagebox.showerror("Error", f"Failed to send email: {e}")
+#
+#     # Close the SMTP connection
+#     smtp.quit()
+
 
 #Monitor memory usage
 def update_memory_usage():
